@@ -1,5 +1,5 @@
 /**
- * Applications
+ * Environments
  *
  * @module      :: Model
  * @description :: A short summary of how this model works and what it represents.
@@ -7,7 +7,7 @@
  */
 
 module.exports = {
-	tableName: 'applications',
+	tableName: 'environments',
 	attributes:
 	{
 		id: "string",
@@ -15,8 +15,17 @@ module.exports = {
 		{
 			type: "uuidv4"
 		},
+		appUUID:
+		{
+			type: "uuidv4",
+			required: true
+		},
 		name: "string",
-		userID: "string"
+		baseEnv:
+		{
+			type: "boolean",
+			defaultsTo: false
+		}
 	},
 	// Lifecycle Callbacks
 	beforeCreate: function (values, next)

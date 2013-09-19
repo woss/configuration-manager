@@ -23,10 +23,6 @@ module.exports = function (req, res, next)
 				if (req.isJSON || req.isAJAX)
 				{
 					return res.send(err);
-					return res.send(
-					{
-						message: 'login failed'
-					});
 				}
 				else
 					return res.redirect("/");

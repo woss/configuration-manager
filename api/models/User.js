@@ -18,7 +18,6 @@ function hashPassword(values, next)
 		next();
 	});
 }
-
 module.exports = {
 	tableName: 'users',
 	attributes:
@@ -47,7 +46,6 @@ module.exports = {
 			var obj = this.toObject();
 			if (callback)
 			{
-				console.log(password);
 				//callback (err, res)
 				return bcrypt.compare(password, obj.password, callback);
 			}
