@@ -11,7 +11,10 @@ module.exports = {
 	},
 	login: function (req, res)
 	{
-		passport.authenticate('local', function (err, user, info)
+		passport.authenticate('basic',
+		{
+			session: false
+		}, function (err, user, info)
 		{
 			if ((err) || (!user))
 			{

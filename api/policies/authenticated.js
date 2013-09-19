@@ -1,22 +1,39 @@
 /**
  * Allow any authenticated user.
  */
+var passport = require('passport');
 module.exports = function (req, res, next)
 {
 	// User is allowed, proceed to controller
 	var is_auth = req.isAuthenticated()
-	if (is_auth) return next();
+	if (is_auth)
+	{
+		return next();
+	}
 	// User is not allowed
 	else
 	{
-		if (req.isJson || req.isAjax)
+		passport.authenticate('basic',
 		{
-			return res.json(
+			session: false
+		}, function (err, user, info)
+		{
+			if ((err) || (!user))
 			{
-				error: "please login"
+				return res.send(
+				{
+					message: 'login failed'
+				});
+				res.send(err);
+			}
+			req.logIn(user, function (err)
+			{
+				if (err) res.send(err);
+				return next();
 			});
-		};
-		return res.redirect("/");
+		})(req, res);
+
+		// return res.redirect("/");
 	}
 
 };

@@ -1,5 +1,5 @@
 var passport = require('passport'),
-	LocalStrategy = require('passport-local').Strategy,
+	BasicStrategy = require('passport-http').BasicStrategy,
 	bcrypt = require('bcrypt');
 
 function findById(id, fn)
@@ -55,11 +55,11 @@ passport.deserializeUser(function (id, done)
 	});
 });
 
-// Use the LocalStrategy within Passport.
+// Use the BasicStrategy within Passport.
 // Strategies in passport require a `verify` function, which accept
 // credentials (in this case, a username and password), and invoke a callback
 // with a user object.
-passport.use(new LocalStrategy(
+passport.use(new BasicStrategy(
 	function (username, password, done)
 	{
 		// asynchronous verification, for effect...
