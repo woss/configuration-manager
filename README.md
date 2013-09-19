@@ -1,0 +1,2 @@
+# confManagerNew
+### a Sails application
