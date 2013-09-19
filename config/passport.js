@@ -8,7 +8,7 @@ module.exports = {
 		{
 			console.log('Express midleware for passport');
 			app.use(passport.initialize());
-			// app.use(passport.session());
+			app.use(passport.session());
 		}
 	}
 };

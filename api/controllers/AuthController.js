@@ -13,24 +13,18 @@ module.exports = {
 	{
 		passport.authenticate('basic',
 		{
-			session: false
+			session: true
 		}, function (err, user, info)
 		{
 			if ((err) || (!user))
 			{
-				return res.send(
-				{
-					message: 'login failed'
-				});
+				return res.send(401);
 				res.send(err);
 			}
 			req.logIn(user, function (err)
 			{
 				if (err) res.send(err);
-				return res.send(
-				{
-					message: 'login successful'
-				});
+				return res.send(200);
 			});
 		})(req, res);
 	},
@@ -38,6 +32,7 @@ module.exports = {
 	{
 		req.logout();
 		res.send('logout successful');
+		return res.redirect("/");
 	}
 };
 

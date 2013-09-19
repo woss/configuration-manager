@@ -15,16 +15,21 @@ module.exports = function (req, res, next)
 	{
 		passport.authenticate('basic',
 		{
-			session: false
+			session: true
 		}, function (err, user, info)
 		{
 			if ((err) || (!user))
 			{
-				return res.send(
+				if (req.isJSON || req.isAJAX)
 				{
-					message: 'login failed'
-				});
-				res.send(err);
+					return res.send(err);
+					return res.send(
+					{
+						message: 'login failed'
+					});
+				}
+				else
+					return res.redirect("/");
 			}
 			req.logIn(user, function (err)
 			{
@@ -32,10 +37,7 @@ module.exports = function (req, res, next)
 				return next();
 			});
 		})(req, res);
-
-		// return res.redirect("/");
 	}
-
 };
 
 // /**

@@ -47,7 +47,13 @@ module.exports.routes = {
 	'/signup':
 	{
 		view: 'auth/signup'
-	}
+	},
+  '/dash':
+  {
+    controller: 'DashController',
+    action: 'index'
+  }
+
 
 	/*
   // But what if you want your home page to display
