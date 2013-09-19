@@ -8,14 +8,11 @@
  * http://sailsjs.org/#documentation
  */
 
-
-
 /**
  * (1) Core middleware
  *
  * Middleware included with `app.use` is run first, before the router
  */
-
 
 /**
  * (2) Static routes
@@ -28,18 +25,34 @@
 
 module.exports.routes = {
 
-  // By default, your root route (aka home page) points to a view
-  // located at `views/home/index.ejs`
-  // 
-  // (This would also work if you had a file at: `/views/home.ejs`)
-  '/': {
-    view: 'home/index'
-  }
+	// By default, your root route (aka home page) points to a view
+	// located at `views/home/index.ejs`
+	// 
+	// (This would also work if you had a file at: `/views/home.ejs`)
+	'/':
+	{
+		view: 'auth/login'
+	},
 
-  /*
+	'/login':
+	{
+		controller: 'AuthController',
+		action: 'login'
+	},
+	'/logout':
+	{
+		controller: 'AuthController',
+		action: 'logout'
+	},
+	'/signup':
+	{
+		view: 'auth/signup'
+	}
+
+	/*
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?
-  '/': {
+  '/signup': {
     view: 'user/signup'
   }
 
@@ -94,8 +107,6 @@ module.exports.routes = {
   */
 };
 
-
-
 /** 
  * (3) Action blueprints
  * These routes can be disabled by setting (in `config/controllers.js`):
@@ -106,7 +117,6 @@ module.exports.routes = {
  *     + its action `bar` is accessible at `/foo/bar`
  *     + its action `index` is accessible at `/foo/index`, and also `/foo`
  */
-
 
 /**
  * (4) Shortcut CRUD blueprints
@@ -154,12 +164,9 @@ module.exports.routes = {
  *
  */
 
-
-
 /**
  * (7) 404 (not found) handler
  *
  * Finally, if nothing else matched, the default 404 handler is triggered.
  * See `config/404.js` to adjust your app's 404 logic.
  */
- 

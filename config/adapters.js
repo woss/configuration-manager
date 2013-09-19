@@ -52,9 +52,5 @@ module.exports.adapters = {
 		// user: 'sailsjs',
 		// password: 'sailsjs',
 		database: 'sailsjsConfManager'
-
-		// OR
-		// module: 'sails-mongo',
-		// url: 'mongodb://USER:PASSWORD@HOST:PORT/DB'
 	}
 };
