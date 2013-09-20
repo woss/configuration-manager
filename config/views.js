@@ -22,7 +22,7 @@ module.exports.views = {
 	// atpl, eco, ect, jazz, jqtpl, JUST, liquor, QEJS, 
 	// swig, templayed, toffee, walrus, & whiskers
 
-	engine: 'jade',
+	engine: 'ejs',
 
 	// Layouts are simply top-level HTML templates you can use as wrappers 
 	// for your server-side views.  If you're using ejs or jade, you can take advantage of
@@ -46,7 +46,7 @@ module.exports.views = {
 	// (the file extension, e.g. ".ejs", should be omitted)
 	//
 
-	layout: true
+	layout: 'layout' // weird
 
 	// Using Multiple Layouts with EJS
 	//

@@ -19,6 +19,10 @@ module.exports.policies = {
 	AuthController:
 	{
 		'login': true
+	},
+	Usercontroller:
+	{
+		'create': true
 	}
 	/*
 	// Here's an example of adding some policies to a controller

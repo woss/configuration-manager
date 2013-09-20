@@ -9,7 +9,15 @@ module.exports = {
 
 	index: function (req, res)
 	{
-		res.view();
+		return res.view(
+		{
+			corndogs: [
+			{
+				name: 'Hank the Corndog'
+			},
+			{
+				name: 'Lenny the Corndog'
+			}]
+		});
 	}
-
 };

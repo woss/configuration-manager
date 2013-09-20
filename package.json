@@ -9,7 +9,7 @@
 		"grunt": "0.4.1",
 		"sails-disk": "~0.9.0",
 		"optimist": "0.3.4",
-		"jade": "*",
+		"ejs": "*",
 		"sails-mongo": "*",
 		"sails-redis": "*",
 		"waterline": "*",
@@ -19,7 +19,9 @@
 		"underscore": "*",
 		"passport": "*",
 		"passport-http": "",
-		"passport-local": ""
+		"passport-local": "",
+		"coffee-script": "",
+		"less": ""
 	},
 	"scripts":
 	{

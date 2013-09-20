@@ -31,7 +31,7 @@ module.exports.routes = {
 	// (This would also work if you had a file at: `/views/home.ejs`)
 	'/':
 	{
-		view: 'auth/login'
+    view: 'auth/index'
 	},
 
 	'/login':
@@ -48,12 +48,11 @@ module.exports.routes = {
 	{
 		view: 'auth/signup'
 	},
-  '/dash':
-  {
-    controller: 'DashController',
-    action: 'index'
-  }
-
+	'/dash':
+	{
+		controller: 'DashController',
+		action: 'index'
+	}
 
 	/*
   // But what if you want your home page to display
