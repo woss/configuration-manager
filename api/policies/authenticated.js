@@ -20,12 +20,17 @@ module.exports = function (req, res, next)
 		{
 			if ((err) || (!user))
 			{
-				if (req.isJSON || req.isAJAX)
+				if (req.isJson || req.isAjax) // this is not working
 				{
-					return res.send(err);
+					return res.json(
+					{
+						error: 403,
+						message: "U need to login"
+					}, 403);
 				}
 				else
 					return res.redirect("/");
+
 			}
 			req.logIn(user, function (err)
 			{
@@ -35,51 +40,3 @@ module.exports = function (req, res, next)
 		})(req, res);
 	}
 };
-
-// /**
-//  * Allow any authenticated user.
-//  */
-// module.exports = function (req, res, ok) {
-
-//   // User is allowed, proceed to controller
-//   if (req.session.authenticated) {
-//     return ok();
-//   }
-
-//   // User is not allowed
-//   else {
-//     return res.send("You are not permitted to perform this action.", 403);
-//   }
-// };
-/**
- * api/policies/authenticated.js
- *
- * This example shows how to use the HTTP Basic authentication strategy using the passport-http module.
- * Other strategies (Digest, OAuth, OAuth2, etc) can be similarly implemented.
- *
- **/
-// var express = require('express'),
-//  app = express(),
-//  passport = require('passport'),
-//  local = require('../../config/local');
-
-// app.use(passport.initialize());
-
-// /**
-//  * Allow any authenticated user.
-//  */
-// module.exports = function (req, res, ok)
-// {
-//  // User is allowed, proceed to controller
-//  passport.authenticate(local.auth,
-//  {
-//    session: false
-//  }, function (err, user, info)
-//  {
-//    if (err || !user)
-//    {
-//      return res.send("You are not permitted to perform this action.", 403);
-//    }
-//    return ok();
-//  })(req, res, ok);
-// };

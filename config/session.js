@@ -27,7 +27,7 @@ module.exports.session = {
 	//
 	host: 'localhost',
 	port: 6379,
-	ttl: 15,
+	ttl: 15000,
 	db: 1,
 	// pass: 'confManager',
 	prefix: 'sess:'

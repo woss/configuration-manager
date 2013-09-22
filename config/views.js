@@ -46,7 +46,8 @@ module.exports.views = {
 	// (the file extension, e.g. ".ejs", should be omitted)
 	//
 
-	layout: 'layout' // weird
+	layout: 'layout', // weird
+	template: 'spacelabs',
 
 	// Using Multiple Layouts with EJS
 	//

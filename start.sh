@@ -1,2 +1,2 @@
 #! /bin/sh
-supervisor -i .tmp,.git app.js
+supervisor --debug -i .tmp,.git,views/layout.ejs app.js

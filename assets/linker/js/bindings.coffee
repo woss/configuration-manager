@@ -1,3 +1,4 @@
+# Bindings for Login Button
 $("#loginButton").on "click", (e) ->
   username = $("#username").val()
   password = $("#password").val()
@@ -6,13 +7,13 @@ $("#loginButton").on "click", (e) ->
     type: "POST"
     url: "login"
     async: true
-    data: "{}"
     beforeSend: (xhr) ->
       xhr.setRequestHeader "Authorization", authHash
-    success: ->
+    success: (xhr)->
       window.location.href = "dash"
     error: (xhr, type) ->
       console.log "error"
+# Bindings for Signup Button
 $("#signUpButton").on "click", (e) ->
   username = $("#usernameSP").val()
   password = $("#passwordSP").val()
@@ -26,7 +27,6 @@ $("#signUpButton").on "click", (e) ->
       dataType: 'json'
       data: {"username":username,"password":password}
       success: ->
-        ch.authHash = authHash
         alert "U have succesfully sign up. plesase login"
         $("#username").val(username)
         $("#password").val(password)

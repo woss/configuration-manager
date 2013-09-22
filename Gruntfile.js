@@ -28,6 +28,9 @@ module.exports = function (grunt)
 	 */
 
 	var cssFilesToInject = [
+		'linker/bootstrap*.css',
+		'linker/bootstrap*.css',
+		'linker/theme*.css',
 		'linker/**/*.css'
 	];
 
@@ -58,13 +61,14 @@ module.exports = function (grunt)
 
 		// All of the rest of your app scripts imported here
 		'linker/js/jquery.min.js',
-		'linker/js/core.js',
 		'linker/js/bindings.js',
 		'linker/js/bootstrap/bootstrap.js',
-		'linker/js/bootstrap/bootstrap.min.js',
 		'linker/js/bootstrap/bootstrap*.js',
 		'linker/**/*.js'
 	];
+	var jsFilesToExcludeFromInject = [
+		'linker/js/core.js'
+	]
 
 	/**
 	 * Client-side HTML templates are injected using the sources below
@@ -194,20 +198,28 @@ module.exports = function (grunt)
 			dev:
 			{
 				files: [
-				{
-					expand: true,
-					cwd: 'assets/styles/',
-					src: ['*.less'],
-					dest: '.tmp/public/styles/',
-					ext: '.css'
-				},
-				{
-					expand: true,
-					cwd: 'assets/linker/styles/',
-					src: ['*.less'],
-					dest: '.tmp/public/linker/styles/',
-					ext: '.css'
-				}]
+					{
+						expand: true,
+						cwd: 'assets/styles/',
+						src: ['*.less'],
+						dest: '.tmp/public/styles/',
+						ext: '.css'
+					},
+					{
+						expand: true,
+						cwd: 'assets/linker/styles/',
+						src: ['*.less'],
+						dest: '.tmp/public/linker/styles/',
+						ext: '.css'
+					},
+					// {
+					// 	expand: true,
+					// 	cwd: 'assets/linker/styles/th_spacelab',
+					// 	src: ['*.less'],
+					// 	dest: '.tmp/public/linker/styles/',
+					// 	ext: '.css'
+					// }
+				]
 			}
 		},
 

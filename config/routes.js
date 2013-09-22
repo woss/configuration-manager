@@ -31,7 +31,7 @@ module.exports.routes = {
 	// (This would also work if you had a file at: `/views/home.ejs`)
 	'/':
 	{
-    view: 'auth/index'
+		view: 'auth/index'
 	},
 
 	'/login':
@@ -43,10 +43,6 @@ module.exports.routes = {
 	{
 		controller: 'AuthController',
 		action: 'logout'
-	},
-	'/signup':
-	{
-		view: 'auth/signup'
 	},
 	'/dash':
 	{

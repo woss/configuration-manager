@@ -16,7 +16,12 @@ module.exports = {
 			type: "uuidv4"
 		},
 		name: "string",
-		userID: "string"
+		userID: "string",
+		active:
+		{
+			type: "bollean",
+			defaultsTo: false
+		}
 	},
 	// Lifecycle Callbacks
 	beforeCreate: function (values, next)
