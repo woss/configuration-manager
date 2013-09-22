@@ -1,6 +1,4 @@
-<%- partial('partials/navbar')%>
-<div class="" id="appList">
-  <h2><span>Application list</span></h2>
+ <h2><span>Application list</span></h2>
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
@@ -16,7 +14,7 @@
         <%if (app.active) { %>
           <tr id="<%= app.id %>" class="success">
         <% } else { %>
-          <tr id="<%= app.id %>" class="warning">
+          <tr class="warning" id="<%= app.id %>">
         <% } %>
         <td><%= app.uuid %></td>
         <td><%= app.name %></td>
@@ -42,4 +40,3 @@
       <% }) %>
     </tbody>
   </table>
-</div>

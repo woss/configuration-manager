@@ -15,17 +15,17 @@
   </head>
 
   <body>
+  Setting session flash msg http://www.youtube.com/watch?v=4Gbc9ZA2-YY
     <!-- Include the view file for the current controller/route -->
     <div class="container">
       <%- body %>
 
-      <div class="flash">
+      <div class="flash" style="display:none">
         <div class="alert alert-dismissable alert-warning">
           <button type="button" class="close" data-dismiss="alert">×</button>
           <h4>Warning!</h4>
           <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p>
         </div>
-      </div>
       <div class="alert alert-dismissable alert-danger">
         <button type="button" class="close" data-dismiss="alert">×</button>
         <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
@@ -43,10 +43,10 @@
 <script src="/linker/js/socket.io.js"></script>
 <script src="/linker/js/sails.io.js"></script>
 <script src="/linker/js/app.js"></script>
+<script src="/linker/js/core.js"></script>
 <script src="/linker/js/jquery.min.js"></script>
 <script src="/linker/js/bindings.js"></script>
 <script src="/linker/js/bootstrap/bootstrap.js"></script>
-<script src="/linker/js/core.js"></script>
 <script src="/linker/js/endBindings.js"></script>
 <!--SCRIPTS END-->
    </body>
