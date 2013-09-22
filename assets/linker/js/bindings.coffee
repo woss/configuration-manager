@@ -15,7 +15,6 @@ $ ->
       error: (xhr, type) ->
         console.log xhr
         console.log type
-
   # Bindings for Signup Button
   $("#signUpButton").on "click", (e) ->
     username = $("#usernameSP").val()
@@ -41,18 +40,20 @@ $ ->
           alert errorMsg.errors[0].message
     else
       alert "Passwords not the same"
-
   # Bindings for disable application
-  $("a.disableApp").on "click", () ->
+  $("button.disableApp").on "click", () ->
     appId = $(this).data("appid")
     data = {
       "id": appId, 
       "active": false
     }
+    $tr = $("#"+appId)
     ch.makePut data, "application", (e) ->
-      $("#"+appId).removeClass("success").addClass "warning"
+      $tr.removeClass("success").addClass "warning"
+      # $tr.closest("button.enableApp").prop('disabled', false)
+      # console.log $tr.closest(".enableApp")
   # Bindings for disable application
-  $("a.enableApp").on "click", () ->
+  $("button.enableApp").on "click", () ->
     appId = $(this).data("appid")
     data = {
       "id": appId, 
@@ -60,3 +61,15 @@ $ ->
     }
     ch.makePut data, "application", (e) ->  
       $("#"+appId).removeClass("warning").addClass "success"
+  $("a.appList").on "click", (e) ->
+    console.log e
+    # should get all env and Confs
+
+
+
+
+
+
+
+
+

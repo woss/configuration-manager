@@ -22,7 +22,7 @@ module.exports = {
 
 		// TODO check is application active or not
 		// if not then throw error
-		// refactor the responses to serve websockets as well, just plain websocekts response
+		// refactor the responses to serve websockets as well, just plain websocekts resp
 
 		// let's find baseConf for this app
 		Configuration.find(

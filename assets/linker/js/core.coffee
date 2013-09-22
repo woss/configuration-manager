@@ -30,3 +30,16 @@ ch =
         _cb({xhr:xhr,success:true})
       error: (xhr, type) ->
         _cb({xhr:xhr,success:false, error: type})
+
+  findRequest: (data, location, _cb) ->
+    $.ajax
+      type: "POST"
+      url: location
+      dataType: "json"
+      async: false
+      contentType: "application/json; charset=utf-8"
+      data: JSON.stringify(data)
+      success: (xhr) ->
+        _cb({xhr:xhr,success:true})
+      error: (xhr, type) ->
+        _cb({xhr:xhr,success:false, error: type})    
