@@ -38,3 +38,8 @@ $("#signUpButton").on "click", (e) ->
         alert errorMsg.errors[0].message
   else
     alert "Passwords not the same"
+
+# Bindings for disable application
+$("a.disableApp").on "click", () ->
+  appId = $(this).data("appid")
+  ch.makePut({"id": appId, "active":false},'application')

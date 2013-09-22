@@ -7,12 +7,22 @@
 
 module.exports = {
 
+	/**
+	 * Get configuration main method
+	 * @param  {[type]} req
+	 * @param  {[type]} res
+	 * @return {[type]}
+	 */
 	getConf: function (req, res)
 	{
 		var appUUID = req.param("appUUID");
 		var envUUID = req.param("envUUID");
 
 		// console.log(req.header('Host')); get host from request. it could be restricted with that aswell
+
+		// TODO check is application active or not
+		// if not then throw error
+		// refactor the responses to serve websockets as well, just plain websocekts response
 
 		// let's find baseConf for this app
 		Configuration.find(

@@ -19,7 +19,7 @@ module.exports = {
 		userID: "string",
 		active:
 		{
-			type: "bollean",
+			type: "boolean",
 			defaultsTo: false
 		}
 	},
