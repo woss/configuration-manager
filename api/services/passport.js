@@ -89,7 +89,6 @@ passport.use(new BasicStrategy(
 						});
 					var returnUser = {
 						username: user.username,
-						createdAt: user.createdAt,
 						id: user.id
 					};
 					return done(null, returnUser,

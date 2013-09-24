@@ -16,22 +16,38 @@ module.exports = {
 			session: true
 		}, function (err, user, info)
 		{
+			console.log(err);
+			console.log(user);
+			console.log(info);
 			if ((err) || (!user))
 			{
-				return res.send(401);
-				res.send(err);
+
+				return res.send(
+				{
+					message: "There is an error with authorisation."
+				}, 401);
+				// res.send(err);
 			}
 			req.logIn(user, function (err)
 			{
-				if (err) res.send(err);
-				return res.json(user, 200);
+				if (err)
+					return res.send(err);
+
+				return res.send(
+				{
+					user: user,
+					message: "Logged in."
+				}, 200);
 			});
 		})(req, res);
 	},
 	logout: function (req, res)
 	{
 		req.logout();
-		res.send('logout successful');
+		res.send(
+		{
+			message: "Logout successful."
+		});
 		return res.redirect("/");
 	}
 };

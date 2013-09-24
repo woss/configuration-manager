@@ -18,26 +18,12 @@
   <!-- Setting session flash msg http://www.youtube.com/watch?v=4Gbc9ZA2-YY -->
     <!-- Include the view file for the current controller/route -->
     <div class="container">
+      <div id="flash" class="alert alert-dismissable " style="display:none">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <!-- <h4>Warning!</h4> -->
+        <p></p>
+      </div>
       <%- body %>
-
-      <div class="flash" style="display:none">
-        <div class="alert alert-dismissable alert-warning">
-          <button type="button" class="close" data-dismiss="alert">×</button>
-          <h4>Warning!</h4>
-          <p>Best check yo self, you're not looking too good. Nulla vitae elit libero, a pharetra augue. Praesent commodo cursus magna, <a href="#" class="alert-link">vel scelerisque nisl consectetur et</a>.</p>
-        </div>
-      <div class="alert alert-dismissable alert-danger">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Oh snap!</strong> <a href="#" class="alert-link">Change a few things up</a> and try submitting again.
-      </div>
-      <div class="alert alert-dismissable alert-success">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Well done!</strong> You successfully read <a href="#" class="alert-link">this important alert message</a>.
-      </div>
-      <div class="alert alert-dismissable alert-info">
-        <button type="button" class="close" data-dismiss="alert">×</button>
-        <strong>Heads up!</strong> This <a href="#" class="alert-link">alert needs your attention</a>, but it's not super important.
-      </div>
     </div>
 <!--SCRIPTS-->
 <script src="/linker/js/socket.io.js"></script>

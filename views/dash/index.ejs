@@ -1,12 +1,23 @@
 <%- partial('partials/navbar')%>
 
-<div class="col-lg-4 col-sm-3" id="appList">
+<div class="col-lg-4 col-sm-4" id="appList">
   <h2>Application List</h2>
   <ul class="list-group">
     <% _.each(apps, function (app) { %>
     <li class="list-group-item">
       <span class="badge">14</span>
-      <a class="appList" data-appid="<%= app.uuid %>"><%= app.name %></a>
+      <a href="#" class="appList" data-appid="<%= app.uuid %>"><%= app.name %></a>
+    </li>
+    <% }) %>
+  </ul>
+</div>
+<div class="col-lg-4 col-sm-5" id="envListContainer">
+  <h2>Application List</h2>
+  <ul class="list-group">
+    <% _.each(apps, function (app) { %>
+    <li class="list-group-item">
+      <span class="badge">14</span>
+      <a href="#" class="appList" data-appid="<%= app.uuid %>"><%= app.name %></a>
     </li>
     <% }) %>
   </ul>

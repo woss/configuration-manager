@@ -1,0 +1,10 @@
+<div class="col-lg-4 col-sm-3" id="appList">
+  <h2>Env List</h2>
+  <ul class="list-group">
+    <% _.each(envs, function (env) { %>
+    <li class="list-group-item">
+      <a class="appList" data-envid="<%= env.uuid %>"><%= env.name %></a>
+    </li>
+    <% }) %>
+  </ul>
+</div>

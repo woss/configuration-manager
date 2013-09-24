@@ -11,10 +11,11 @@ $ ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader "Authorization", authHash
       success: (xhr)->
+        console.log xhr
         window.location.href = "dash"
       error: (xhr, type) ->
-        console.log xhr
-        console.log type
+        messageJSON = JSON.parse(xhr.responseText)
+        ch.showFlashMsg("w",messageJSON.message)
   # Bindings for Signup Button
   $("#signUpButton").on "click", (e) ->
     username = $("#usernameSP").val()
@@ -62,7 +63,10 @@ $ ->
     ch.makePut data, "application", (e) ->  
       $("#"+appId).removeClass("warning").addClass "success"
   $("a.appList").on "click", (e) ->
-    console.log e
+    appUUID = $(this).data('appid')
+    data = {appUUID:appUUID}
+    ch.makePost data, "environment/getEnvs", (e) ->
+      console.log e
     # should get all env and Confs
 
 
