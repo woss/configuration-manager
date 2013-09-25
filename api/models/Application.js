@@ -13,7 +13,10 @@ module.exports = {
         uuid: {
             type: "uuidv4"
         },
-        name: "string",
+        name: {
+            type: "string",
+            required: true
+        },
         userID: {
             type: "string",
             required: true

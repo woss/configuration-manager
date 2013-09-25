@@ -50,10 +50,12 @@ $ ->
     }
     $tr = $("#"+appId)
     $button = $(this)
-    ch.makePut data, "application", (e) ->
+    socket.put "/application", data, (response) ->
+      console.log response
       $tr.removeClass("success").addClass "warning"
       $button.prop('disabled', true)
       $($button.prev(".enableApp")).prop('disabled', false)
+
   # Bindings for disable application
   $("button.enableApp").on "click", () ->
     appId = $(this).data("appid")
@@ -62,10 +64,12 @@ $ ->
       "id": appId, 
       "active": true
     }
-    ch.makePut data, "application", (e) ->  
+    socket.put "/application", data, (response) -> 
+      console.log response
       $("#"+appId).removeClass("warning").addClass "success"
       $button.prop('disabled', true)
       $($button.next(".disableApp")).prop('disabled', false)
+
 $("#saveAppFromModal").on "click", ->
   if $("#appEnabled").val() is "on"
    active = true
@@ -75,8 +79,9 @@ $("#saveAppFromModal").on "click", ->
     "name" : $("#appName").val(),
     "active": active
   }
-  ch.makePost data, 'application/create', (e) ->
-    location.reload();
+  socket.post "/application/create", data, (response) ->
+    console.log response
+    
 
 
 
