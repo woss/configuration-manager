@@ -1,10 +1,13 @@
-<div class="col-lg-4 col-sm-3" id="appList">
-  <h2>Env List</h2>
-  <ul class="list-group">
-    <% _.each(envs, function (env) { %>
-    <li class="list-group-item">
-      <a class="appList" data-envid="<%= env.uuid %>"><%= env.name %></a>
-    </li>
-    <% }) %>
-  </ul>
+<div class="" id="envList">
+  <%- partial('partials/addEnv') %>
+  <%
+  if( envs.length > 0 ){ %> 
+    <%- partial('partials/listEnvs')%>
+  <% } else { %>
+  <div class="alert alert-dismissable alert-warning">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <h4>Warning!</h4>
+    <p>Hey dude u don't have any env!!!</p>
+  </div>
+  <% } %>
 </div>

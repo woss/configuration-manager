@@ -1,0 +1,31 @@
+<h2><span>Environment list</span> <span class="badge"><%= envs.length  %> </span> </h2>
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>App name</th>
+        <th>UUID</th>
+        <th>More stuff</th>
+        <th>Let's DELETE!!!</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <% _.each(envs, function (env) { %>
+        <%if (env.active) { %>
+          <tr id="<%= env.id %>" class="success">
+        <% } else { %>
+          <tr id="<%= env.id %>" class="warning">
+        <% } %>
+        <td><%= env.name %></td>
+        <td><%= env.uuid %></td>
+        <td>
+          <button type="button" <% if( env.active ) { %> disabled="disabled" <% } %> data-envid="<%= env.id %>" class="btn btn-success enableEnv">Enable</button>
+          <button type="button" <%if( !env.active ) { %>  disabled="disabled" <% } %>  data-envid="<%= env.id %>" class="btn btn-warning disableEnv">Disable</button>
+        </td>
+        <td>
+          <button type="button" data-envid="<%= env.id %>"  class="btn btn-danger deleteEnv">Delete</button>
+        </td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>

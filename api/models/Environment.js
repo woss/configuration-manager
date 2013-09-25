@@ -20,7 +20,11 @@ module.exports = {
 			type: "uuidv4",
 			required: true
 		},
-		name: "string",
+		name:
+		{
+			type: "string",
+			required: true
+		},
 		baseEnv:
 		{
 			type: "boolean",

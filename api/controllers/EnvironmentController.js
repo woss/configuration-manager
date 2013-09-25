@@ -14,8 +14,9 @@ module.exports = {
 			{
 				appUUID: req.param('appUUID')
 			}
-		}).done(function (err, envs)
+		}).sort('active DESC').done(function (err, envs)
 		{
+			console.log(err, envs);
 			if (req.isJson || req.isAjax)
 				res.json(envs);
 			else

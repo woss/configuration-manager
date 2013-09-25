@@ -8,12 +8,13 @@
 module.exports = {
 	create: function (req, res)
 	{
-		if (!req.param("name"))
+		if (req.param("name") == '')
 		{
-			res.json = {
+			res.json(
+			{
 				success: false,
 				message: "Name must be provided"
-			};
+			});
 		}
 		Application.create(
 		{

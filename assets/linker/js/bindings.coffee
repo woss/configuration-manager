@@ -81,8 +81,63 @@ $("#saveAppFromModal").on "click", ->
   }
   socket.post "/application/create", data, (response) ->
     console.log response
-    
+    location.reload()
+$("#saveEnvFromModal").on "click", ->
+  if $("#baseEnv").val() is "on"
+   baseEnv = true
+  else
+    baseEnv = false
+  data = {
+    name : $("#envName").val(),
+    baseEnv: baseEnv,
+    appUUID: $(this).data("appid")
+  }
+  socket.post "/environment", data, (response) ->
+    console.log response
+    # location.reload()
+$("button.deleteEnv").on "click", (e) ->
+  $this = $(this)
+  data = {
+    "id" : $this.data('envid')
+  }
+  socket.delete '/environment', data, (_res) ->
+    $this.closest('tr').remove() #remove row $(this).closest('tr').attr('data-id');
 
+$("button.deleteApp").on "click", (e) ->
+  $this = $(this)
+  data = {
+    "id" : $this.data('appid')
+  }
+  socket.delete '/application', data, (_res) ->
+    $this.closest('tr').remove() #remove row $(this).closest('tr').attr('data-id');
+
+$("button.disableEnv").on "click", () ->
+  envid = $(this).data("envid")
+  data = {
+    "id": envid, 
+    "active": false
+  }
+  $tr = $("#"+envid)
+  $button = $(this)
+  socket.put "/environment", data, (response) ->
+    console.log response
+    $tr.removeClass("success").addClass "warning"
+    $button.prop('disabled', true)
+    $($button.prev(".enableEnv")).prop('disabled', false)
+
+  # Bindings for disable environment
+$("button.enableEnv").on "click", () ->
+  envid = $(this).data("envid")
+  $button = $(this)
+  data = {
+    "id": envid, 
+    "active": true
+  }
+  socket.put "/environment", data, (response) -> 
+    console.log response
+    $("#"+envid).removeClass("warning").addClass "success"
+    $button.prop('disabled', true)
+    $($button.next(".disableEnv")).prop('disabled', false)
 
 
 
