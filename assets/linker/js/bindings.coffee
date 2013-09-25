@@ -66,7 +66,17 @@ $ ->
       $("#"+appId).removeClass("warning").addClass "success"
       $button.prop('disabled', true)
       $($button.next(".disableApp")).prop('disabled', false)
-
+$("#saveAppFromModal").on "click", ->
+  if $("#appEnabled").val() is "on"
+   active = true
+  else
+    active = false
+  data = {
+    "name" : $("#appName").val(),
+    "active": active
+  }
+  ch.makePost data, 'application/create', (e) ->
+    location.reload();
 
 
 
