@@ -1,24 +1,33 @@
-<%- partial('partials/navbar')%>
-
-<div class="col-lg-4 col-sm-4" id="appList">
-  <h2>Application List</h2>
-  <ul class="list-group">
-    <% _.each(apps, function (app) { %>
-    <li class="list-group-item">
-      <span class="badge">14</span>
-      <a href="#" class="appList" data-appid="<%= app.uuid %>"><%= app.name %></a>
-    </li>
-    <% }) %>
-  </ul>
-</div>
-<div class="col-lg-4 col-sm-5" id="envListContainer">
-  <h2>Application List</h2>
-  <ul class="list-group">
-    <% _.each(apps, function (app) { %>
-    <li class="list-group-item">
-      <span class="badge">14</span>
-      <a href="#" class="appList" data-appid="<%= app.uuid %>"><%= app.name %></a>
-    </li>
-    <% }) %>
-  </ul>
+<div class="" id="appList">
+  <h2><span>Application list</span></h2>
+  <table class="table table-striped table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>UUID</th>
+        <th>App name</th>
+        <th>Actions</th>
+        <th>Column heading</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <% _.each(apps, function (app) { %>
+        <%if (app.active) { %>
+          <tr id="<%= app.id %>" class="success">
+        <% } else { %>
+          <tr id="<%= app.id %>" class="warning">
+        <% } %>
+        <td><%= app.uuid %></td>
+        <td><%= app.name %></td>
+        <td>
+        <div class="btn-group">
+          <button type="button" <% if( app.active ) { %> disabled="disabled" <% } %> data-appid="<%= app.id %>" class="btn btn-success enableApp">Enable</button>
+          <button type="button" <%if( !app.active ) { %>  disabled="disabled" <% } %>  data-appid="<%= app.id %>" class="btn btn-danger disableApp">Disable</button>
+        </div>
+        </td>
+        <td>Column content</td>
+      </tr>
+      <% }) %>
+    </tbody>
+  </table>
 </div>

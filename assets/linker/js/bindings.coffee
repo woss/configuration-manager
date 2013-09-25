@@ -49,25 +49,23 @@ $ ->
       "active": false
     }
     $tr = $("#"+appId)
+    $button = $(this)
     ch.makePut data, "application", (e) ->
       $tr.removeClass("success").addClass "warning"
-      # $tr.closest("button.enableApp").prop('disabled', false)
-      # console.log $tr.closest(".enableApp")
+      $button.prop('disabled', true)
+      $($button.prev(".enableApp")).prop('disabled', false)
   # Bindings for disable application
   $("button.enableApp").on "click", () ->
     appId = $(this).data("appid")
+    $button = $(this)
     data = {
       "id": appId, 
       "active": true
     }
     ch.makePut data, "application", (e) ->  
       $("#"+appId).removeClass("warning").addClass "success"
-  $("a.appList").on "click", (e) ->
-    appUUID = $(this).data('appid')
-    data = {appUUID:appUUID}
-    ch.makePost data, "environment/getEnvs", (e) ->
-      console.log e
-    # should get all env and Confs
+      $button.prop('disabled', true)
+      $($button.next(".disableApp")).prop('disabled', false)
 
 
 
