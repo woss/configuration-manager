@@ -10,7 +10,7 @@ module.exports = function (req, res, next)
 	{
 		return next();
 	}
-	// User is not allowed
+	// User is not logged in
 	else
 	{
 		passport.authenticate('basic',
