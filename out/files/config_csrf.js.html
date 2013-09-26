@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>config/csrf.js</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title=""></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: </em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/:: Controller.html">:: Controller</a></li>
+            
+                <li><a href="../modules/:: Model.html">:: Model</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: config/csrf.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
+ * Cross-Site Request Forgery Protection
+ *
+ * CSRF tokens are like a tracking chip.  While a session tells the server that a user
+ * &quot;is who they say they are&quot;, a csrf token tells the server &quot;you are where you say you are&quot;.
+ *
+ * When enabled, all non-GET requests to the Sails server must be accompanied by
+ * a special token, identified as the &#x27;_csrf&#x27; parameter.
+ *
+ * This option protects your Sails app against cross-site request forgery (or CSRF) attacks.
+ * A would-be attacker needs not only a user&#x27;s session cookie, but also this timestamped,
+ * secret CSRF token, which is refreshed/granted when the user visits a URL on your app&#x27;s domain.
+ *
+ * This allows us to have certainty that our users&#x27; requests haven&#x27;t been hijacked,
+ * and that the requests they&#x27;re making are intentional and legitimate.
+ *
+ * This token has a short-lived expiration timeline, and must be acquired by either:
+ *
+ * (a)		For traditional view-driven web apps:
+ *			Fetching it from one of your views, where it may be accessed as
+ *			a local variable, e.g.:
+ *			&lt;form&gt;
+ *				&lt;input type=&quot;hidden&quot; name=&quot;_csrf&quot; value=&quot;&lt;%= _csrf %&gt;&quot; /&gt;
+ *			&lt;/form&gt;
+ *
+ * or (b)	For AJAX/Socket-heavy and/or single-page apps:
+ *			Sending a GET request to the &#x60;/csrfToken&#x60; route, where it will be returned
+ *			as JSON, e.g.:
+ *			{ _csrf: &#x27;ajg4JD(JGdajhLJALHDa&#x27; }
+ *
+ *
+ * Enabling this option requires managing the token in your front-end app.
+ * For traditional web apps, it&#x27;s as easy as passing the data from a view into a form action.
+ * In AJAX/Socket-heavy apps, just send a GET request to the /csrfToken route to get a valid token.
+ *
+ * For more information on CSRF, check out:
+ * http://en.wikipedia.org/wiki/Cross-site_request_forgery
+ */
+
+module.exports.csrf = false;
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

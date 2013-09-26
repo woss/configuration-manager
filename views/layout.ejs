@@ -4,14 +4,27 @@
   <title><%- title %></title>
   <!-- Viewport mobile tag for sensible mobile support -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1" name=
-  "viewport"><!--STYLES-->
-<link rel="stylesheet" href="/linker/styles/auth.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap-theme.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap-theme.min.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap.min.css">
-<link rel="stylesheet" href="/linker/styles/theme.css">
-<!--STYLES END-->
+  "viewport">
+  <!--STYLES-->
+  <link rel="stylesheet" href="/linker/styles/auth.css">
+  <link rel="stylesheet" href="/linker/styles/bootstrap-theme.css">
+  <link rel="stylesheet" href="/linker/styles/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="/linker/styles/bootstrap.css">
+  <link rel="stylesheet" href="/linker/styles/bootstrap.min.css">
+  <link rel="stylesheet" href="/linker/styles/theme.css">
+  <!--STYLES END-->
+
+<script src="/linker/js/underscore-min.js"></script>
+<script src="/linker/js/jquery-2.0.3.min.js"></script>
+<script src="/linker/js/knockout-2.3.0.js"></script>
+<script src="/linker/js/socket.io.js"></script>
+<script src="/linker/js/sails.io.js"></script>
+<script src="/linker/js/app.js"></script>
+<script src="/linker/js/core.js"></script>
+<script src="/linker/js/bindings.js"></script>
+<script src="/linker/js/bootstrap/bootstrap.js"></script>
+<script src="/linker/js/endBindings.js"></script>
+
 </head>
 
 <body>
@@ -21,8 +34,6 @@
   <div class="container">
     <div class="alert alert-dismissable" id="flash" style="display:none">
       <button class="close" data-dismiss="alert" type="button">×</button> 
-      <!-- <h4>Warning!</h4> -->
-
       <p></p>
     </div>
     <% if (req.user) { %>
@@ -69,15 +80,6 @@
     </ul>
     <% } %>
     <%- body %>
-  </div><!--SCRIPTS-->
-<script src="/linker/js/socket.io.js"></script>
-<script src="/linker/js/sails.io.js"></script>
-<script src="/linker/js/app.js"></script>
-<script src="/linker/js/core.js"></script>
-<script src="/linker/js/jquery.min.js"></script>
-<script src="/linker/js/bindings.js"></script>
-<script src="/linker/js/bootstrap/bootstrap.js"></script>
-<script src="/linker/js/endBindings.js"></script>
-<!--SCRIPTS END-->
+  </div>
 </body>
 </html>

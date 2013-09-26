@@ -1,35 +1,32 @@
 <div class="" id="appList">
   <%- partial('partials/addNewApp')%>
-  <h2><span>Application list</span><span class="badge"><%= apps.length  %> </span> </h2>
+  <h2><span>Application list</span><span class="badge"  data-bind="text: apps().length"> </span> </h2>
   <table class="table table-striped table-bordered table-hover">
     <thead>
       <tr>
-        <th>UUID</th>
         <th>App name</th>
         <th>Actions</th>
         <th>Delete!!!</th>
       </tr>
     </thead>
-    <tbody>
-      
-      <% _.each(apps, function (app) { %>
-        <%if (app.active) { %>
-          <tr id="<%= app.id %>" class="success">
-        <% } else { %>
-          <tr id="<%= app.id %>" class="warning">
-        <% } %>
-        <td><span><%= app.uuid %></span></td>
-        <td><span><%= app.name %></span></td>
+    <tbody data-bind="foreach: apps, visible: apps().length > 0">
+      <tr class="success"  >
+        <td data-bind="text: name"></td>
         <td>
-          <button type="button" <% if( app.active ) { %> disabled="disabled" <% } %> data-appid="<%= app.id %>" class="btn btn-success enableApp">Enable</button>
-          <button type="button" <%if( !app.active ) { %>  disabled="disabled" <% } %>  data-appid="<%= app.id %>" class="btn btn-warning disableApp">Disable</button>
-          <a href="/environment/getEnvs?appUUID=<%= app.uuid %>" ><button type="button" class="btn btn-info ">Show Envs</button></a>
+          <button type="button" class="btn btn-success enableApp">Enable</button>
+          <button type="button" class="btn btn-warning disableApp">Disable</button>
+<!--           <a href="/environment/getEnvs?appUUID=1312" >
+            <button type="button" class="btn btn-info ">Show Envs</button>
+          </a> -->
+          <input type="checkbox" data-bind="checked: isActive" />
         </td>
         <td>
-          <button type="button" data-appid="<%= app.id %>"  class="btn btn-danger deleteApp">Delete</button>
+          <button type="button" data-bind="click: $parent.removeApp" class="btn btn-danger deleteApp">Delete</button>
         </td>
       </tr>
-      <% }) %>
     </tbody>
   </table>
+  <!-- You have <b data-bind="text: disabledApps().length">&nbsp;</b> incomplete task(s) -->
 </div>
+
+<script src="/linker/js/models/application.js"></script>
