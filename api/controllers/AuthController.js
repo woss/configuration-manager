@@ -7,7 +7,11 @@ module.exports = {
 
 	index: function (req, res)
 	{
-		res.view();
+		var is_auth = req.isAuthenticated();
+		if (is_auth)
+			return res.redirect('/dash');
+		else
+			res.view();
 	},
 	login: function (req, res)
 	{
