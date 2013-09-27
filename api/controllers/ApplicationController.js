@@ -41,5 +41,41 @@ module.exports = {
 				});
 			}
 		})
+	},
+	list: function (req, res)
+	{
+		var user = req.user;
+		var response = [];
+		// console.log(req.user);
+		Application.find(
+		{
+			userID: user.id
+		}).sort('active DESC').done(function (err, _apps)
+		{
+			// res.view('application/partials/list',
+			// {
+			// 	message: 'Login failed!',
+			// 	layout: null,
+			// 	apps: _apps,
+			// 	success: true
+			// });
+			if (req.isJson || req.isSocket)
+			{
+				res.json(
+				{
+					apps: _apps,
+					success: true
+				});
+			}
+			else
+			{
+				res.view('application/list',
+				{
+					layout: null,
+					apps: _apps,
+					success: true
+				});
+			}
+		});
 	}
 }

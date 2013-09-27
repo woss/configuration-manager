@@ -22,6 +22,6 @@ AppListViewModel = ->
     mappedApps = _.map apps, (app) ->
       new App(app)
     self.apps mappedApps
-  # socket.on "message", (data) ->
-  #   console.log messages data
+  socket.on "message", (data) ->
+    console.log messages data
 ko.applyBindings new AppListViewModel()

@@ -139,9 +139,5 @@ $("button.enableEnv").on "click", () ->
     $button.prop('disabled', true)
     $($button.next(".disableEnv")).prop('disabled', false)
 
-
-
-
-
-
-
+$.get "/application/list", ( data ) ->
+  $( "#appList" ).html( data );
