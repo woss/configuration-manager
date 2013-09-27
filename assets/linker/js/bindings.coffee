@@ -138,6 +138,6 @@ $("button.enableEnv").on "click", () ->
     $("#"+envid).removeClass("warning").addClass "success"
     $button.prop('disabled', true)
     $($button.next(".disableEnv")).prop('disabled', false)
-
-$.get "/application/list", ( data ) ->
-  $( "#appList" ).html( data );
+# socket.on "message", (data) ->
+#   dosomething = ''
+#   console.log data

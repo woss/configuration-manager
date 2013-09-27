@@ -6,42 +6,58 @@
  */
 
 module.exports = {
-	create: function (req, res)
-	{
-		if (req.param("name") == '')
-		{
-			res.json(
-			{
-				success: false,
-				message: "Name must be provided"
-			});
-		}
-		Application.create(
-		{
-			name: req.param('name'),
-			userID: req.user.id,
-			active: req.param('active')
-		}).done(function (error, app)
-		{
-			if (error)
-			{
-				res.send(500,
-				{
-					error: "DB Error"
-				});
-			}
-			else
-			{
-				res.send(
-				{
-					success: true,
-					id: app.id,
-					uuid: app.uuid,
-					name: app.name
-				});
-			}
-		})
-	},
+	// create: function (req, res)
+	// {
+	// 	return res.json(
+	// 	{
+	// 		"uri": "/chat/create",
+	// 		"data":
+	// 		{
+	// 			"id": 283,
+	// 			"message": "who is going out tonight?",
+	// 			"user":
+	// 			{
+	// 				"id": 3,
+	// 				"username": "Roscoe"
+	// 			}
+	// 		}
+	// 	});
+	// 	if (_.isUndefined(req.param("name")))
+	// 	{
+	// 		return res.send(
+	// 		{
+	// 			success: false,
+	// 			message: "Name must be provided"
+	// 		});
+	// 	}
+	// 	Application.create(
+	// 	{
+	// 		name: req.param('name'),
+	// 		userID: req.user.id,
+	// 		active: req.param('active')
+	// 	}).done(function (error, app)
+	// 	{
+	// 		if (error)
+	// 		{
+	// 			return res.send(500,
+	// 			{
+	// 				error: "DB Error",
+	// 				message: error
+	// 			});
+	// 		}
+	// 		else
+	// 		{
+	// 			res.send(
+	// 			{
+	// 				success: true,
+	// 				id: app.id,
+	// 				uuid: app.uuid,
+	// 				name: app.name,
+	// 				message: 'here'
+	// 			});
+	// 		}
+	// 	})
+	// },
 	list: function (req, res)
 	{
 		var user = req.user;
