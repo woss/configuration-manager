@@ -1,45 +1,41 @@
-class App
+class Env 
   constructor: (data) ->
-    @name = ko.observable(data.name)
-    @id = data.id
-    @isActive = ko.observable(data.active)
-    @isNotActive = ko.observable(data.active)
+    @name = data.name
 
-AppListViewModel = ->
+EnvListViewModel = ->
   self = this
-  self.apps = ko.observableArray([])
+  self.envs = ko.observableArray([])
   self.newAppName = ko.observable()
   self.isActive = ko.observable()
   self.isNotActive = ko.observable()
-  self.disabledApps = ko.computed ->
-    ko.utils.arrayFilter self.apps(), (app) ->
+  self.disabledenvs = ko.computed ->
+    ko.utils.arrayFilter self.envs(), (app) ->
       not app.isActive()
   self.removeApp = (app) ->
     data = {id:app.id}
     socket.delete "/application",data, (res) ->
-      self.apps.remove app  
+      self.envs.remove app  
       console.log res
   self.addApp = () ->
     data = {name: this.newAppName(), active: this.isActive(), userID: ch.user.id}
-    socket.post "/application/create",data, (app) ->
+    socket.post "/application",data, (app) ->
       console.log data
       console.log app
-      self.apps.push( new App(data) )
+      self.envs.push( new App(data) )
   # getting data
-  socket.get "/application", (apps) ->
-    mappedApps = _.map apps, (app) ->
+  socket.get "/application", (envs) ->
+    mappedenvs = _.map envs, (app) ->
       new App(app)
-    self.apps mappedApps
-  #listening socket for new apps
+    self.envs mappedenvs
+  #listening socket for new envs
   socket.on "message", (data) ->
     if data.model is "application"
-      self.apps.push(new App(data.data))
+      self.envs.push(new App(data.data))
   self.openApp = (app) -> 
     socket.get "/environment", (envs) ->
       console.log envs
       console.log new Env(envs[7])
-      $(".jumbotron").addClass "sr-only"
     _v = 'f'
     console.log app
   _var = 'foo'
-ko.applyBindings new AppListViewModel(), $("#appList")[0]
+ko.applyBindings new EnvListViewModel(), $("#envList")[0]

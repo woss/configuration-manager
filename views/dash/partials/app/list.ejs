@@ -1,6 +1,5 @@
-<h2><span>Application list <span class="badge" data-bind="text: apps().length"> </span></span> </h2>
-<ul class="list-group" data-bind="foreach: apps, visible: apps().length > 0">
-  <li class="list-group-item" >
+<ul class="dropdown-menu" data-bind="foreach: apps, visible: apps().length > 0">
+  <li data-bind="click: $root.openApp" >
   <!-- <div class="btn-group">
     <button type="button" class="btn btn-info">Actions</button>
     <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
@@ -11,9 +10,10 @@
       <li><a href="#">View Environments</a></li>
     </ul>
   </div> -->
-  <button type="button"  class="btn btn-success" data-bind="checked: isActive">Enable</button>
-  <button type="button"  class="btn btn-warning" data-bind="checked: isNotActive">Disable</button>
+  <!-- <button type="button"  class="btn btn-success" data-bind="checked: isActive">Enable</button>
+  <button type="button"  class="btn btn-warning" data-bind="checked: isNotActive">Disable</button> -->
   <a href="#" class="text-muted" data-bind="text: name"></a>
-  <button type="button" data-bind="click: $parent.removeApp"  class="close pull-right" aria-hidden="true">&times;</button>
+  <!-- <button type="button" data-bind="click: $parent.removeApp"  class="close pull-right" aria-hidden="true">&times;</button> -->
   </li>
 </ul>
+<script src="/linker/js/models/application.js"></script>
