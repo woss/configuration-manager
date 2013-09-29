@@ -2,6 +2,7 @@ class App
   constructor: (data) ->
     @name = ko.observable(data.name)
     @id = data.id
+    @uuid = data.uuid
     @isActive = ko.observable(data.active)
     @isNotActive = ko.observable(data.active)
 
@@ -35,11 +36,15 @@ AppListViewModel = ->
     if data.model is "application"
       self.apps.push(new App(data.data))
   self.openApp = (app) -> 
-    socket.get "/environment", (envs) ->
-      console.log envs
-      console.log new Env(envs[7])
-      $(".jumbotron").addClass "sr-only"
-    _v = 'f'
     console.log app
+    data = {
+      "where":{
+        "appUUID":app.uuid
+      }
+    }
+    socket.post "/environment/find", data, (envs) ->
+      console.log envs
+      # console.log new Env(envs[7])
+      $(".jumbotron").addClass "sr-only"
   _var = 'foo'
 ko.applyBindings new AppListViewModel(), $("#appList")[0]
