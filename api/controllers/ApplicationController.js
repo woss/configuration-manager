@@ -8,26 +8,28 @@
 module.exports = {
 	create: function (req, res)
 	{
-		return res.json(
-		{
-			"uri": "/chat/create",
-			"data":
-			{
-				"id": 283,
-				"message": "who is going out tonight?",
-				"user":
-				{
-					"id": 3,
-					"username": "Roscoe"
-				}
-			}
-		});
+		// return res.json(
+		// {
+		// 	"uri": "/chat/create",
+		// 	"data":
+		// 	{
+		// 		"id": 283,
+		// 		"message": "who is going out tonight?",
+		// 		"user":
+		// 		{
+		// 			"id": 3,
+		// 			"username": "Roscoe"
+		// 		}
+		// 	}
+		// });
 		if (_.isUndefined(req.param("name")))
 		{
-			return res.send(
+			return res.json(
 			{
+
 				success: false,
 				message: "Name must be provided"
+
 			});
 		}
 		Application.create(
@@ -35,63 +37,46 @@ module.exports = {
 			name: req.param('name'),
 			userID: req.user.id,
 			active: req.param('active')
-		}).done(function (error, app)
-		{
-			if (error)
-			{
-				return res.send(500,
-				{
-					error: "DB Error",
-					message: error
-				});
-			}
-			else
-			{
-				res.send(
-				{
-					success: true,
-					id: app.id,
-					uuid: app.uuid,
-					name: app.name,
-					message: 'here'
-				});
-			}
 		})
-	},
-	list: function (req, res)
-	{
-		var user = req.user;
-		var response = [];
-		// console.log(req.user);
-		Application.find(
-		{
-			userID: user.id
-		}).sort('active DESC').done(function (err, _apps)
-		{
-			// res.view('application/partials/list',
-			// {
-			// 	message: 'Login failed!',
-			// 	layout: null,
-			// 	apps: _apps,
-			// 	success: true
-			// });
-			if (req.isJson || req.isSocket)
+			.done(function (error, app)
 			{
-				res.json(
+				if (error)
 				{
-					apps: _apps,
-					success: true
-				});
-			}
-			else
-			{
-				res.view('application/list',
+					return res.json(500,
+					{
+						error: "DB Error",
+						message: error
+					});
+				}
+				else
 				{
-					layout: null,
-					apps: _apps,
-					success: true
-				});
-			}
-		});
+					Environment.create(
+					{
+						name: 'General',
+						appUUID: app.uuid,
+						baseEnv: true
+					})
+						.done(function (error, env)
+						{
+							Configuration.create(
+							{
+								appUUID: app.uuid,
+								envUUID: env.uuid,
+								baseConf: true,
+								data:
+								{}
+							})
+								.done(function () {});
+						});
+					return res.json(
+					{
+						success: true,
+						id: app.id,
+						uuid: app.uuid,
+						name: app.name,
+						message: 'here'
+					});
+				}
+			})
 	}
 }

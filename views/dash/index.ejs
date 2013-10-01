@@ -11,8 +11,9 @@
     </ul>
   </div>
   <div class="col-lg-10" bind-data="visible: confs().length > 0">
-  <%- partial('partials/tmp/tmp')%>
-    <ul class="list-group " data-bind="foreach: confs >
+    <%- partial('partials/tmp/tmp')%>
+    <%- partial('partials/app/addNew')%>
+    <ul class="list-group " data-bind="foreach: confs">
       <li class="list-group-item">
         <ul class="nav nav-tabs">
           <li><a href="#info" class="active" data-toggle="tab">Info</a></li>
