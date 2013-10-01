@@ -1,14 +1,40 @@
-<div class="page-header">
-  <h1 id="container"><%=req.user.id%></h1>
+<div id="mainContainer">
+  <div class="page-header">
+    <h1 data-bind="text: appName()"></h1>
+  </div>
+  <div id="envList" class="col-lg-2">
+    <ul class="list-group" data-bind="foreach: envs, visible: envs().length > 0" >
+      <li class="list-group-item" data-bind="click: $root.openConfs">
+        <span  data-bind="text: name"></span>
+        <span class="badge" data-bind="text: confs().length"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-10" bind-data="visible: confs().length > 0">
+  <%- partial('partials/tmp/tmp')%>
+    <ul class="list-group " data-bind="foreach: confs >
+      <li class="list-group-item">
+        <ul class="nav nav-tabs">
+          <li><a href="#info" class="active" data-toggle="tab">Info</a></li>
+          <li><a href="#data" data-toggle="tab">Data</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+            <div class="panel panel-primary">
+            <div class="panel-heading">
+              Conf UUID : <span class="panel-title" data-bind="text: uuid"></span>
+            </div>
+            <div class="panel-body">
+              sadasdasasd
+            </div>
+          </div>
+          </div>
+          <div class="tab-pane" id="data">
+            <code  data-bind="text: ko.toJSON(data)"></code>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
-<div class="jumbotron">
-  <h1>Jumbotron</h1>
-  <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
-  <p><a class="btn btn-primary btn-lg">Learn more</a></p>
-</div>
-<div id="envList" class="viewApp" data-bind="">
-    <div class="appInfo">
-        
-    </div>
-</div>
-<script src="/linker/js/models/environment.js"></script>
+<script src="/linker/js/models/application.js"></script>
