@@ -82,22 +82,24 @@ module.exports = {
 				});
 			}
 		});
+	},
+	deleteAll: function (req, res)
+	{
+		// For example, to delete a user named Johnny,
+		Configuration.destroy().done(function (err)
+		{
+			if (err)
+				return res.json(
+				{
+					success: false,
+					error: err
+				});
+			else
+				res.json(
+				{
+					success: true,
+					message: "Configurations deleted"
+				});
+		});
 	}
-};
-module.exports.blueprints = {
-
-	// Expose a route for every method,
-	// e.g.
-	// `/auth/foo` => `foo: function (req, res) {}`
-	actions: true,
-
-	// Expose a RESTful API, e.g.
-	// `post /auth` => `create: function (req, res) {}`
-	rest: true,
-
-	// Expose simple CRUD shortcuts, e.g.
-	// `/auth/create` => `create: function (req, res) {}`
-	// (useful for prototyping)
-	shortcuts: true
-
 };

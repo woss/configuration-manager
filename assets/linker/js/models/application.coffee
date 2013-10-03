@@ -68,6 +68,7 @@ $ ->
     self.openApp = (app) -> 
       self.appInfo = true
       self.appName(app.name)
+      console.log app
       data = {
         "where":{
           "appUUID":app.uuid

@@ -8,6 +8,7 @@
 module.exports = {
 	create: function (req, res)
 	{
+		// console.log(req.socket);
 		// return res.json(
 		// {
 		// 	"uri": "/chat/create",
@@ -22,11 +23,11 @@ module.exports = {
 		// 		}
 		// 	}
 		// });
+
 		if (_.isUndefined(req.param("name")))
 		{
 			return res.json(
 			{
-
 				success: false,
 				message: "Name must be provided"
 
@@ -66,17 +67,40 @@ module.exports = {
 								data:
 								{}
 							})
-								.done(function () {});
+								.done(function ()
+								{
+									return res.json(
+									{
+										success: true,
+										id: app.id,
+										uuid: app.uuid,
+										name: app.name,
+										active: app.active
+									});
+								});
 						});
-					return res.json(
-					{
-						success: true,
-						id: app.id,
-						uuid: app.uuid,
-						name: app.name,
-						message: 'here'
-					});
+
 				}
 			})
+	},
+
+	deleteAll: function (req, res)
+	{
+		// For example, to delete a user named Johnny,
+		Application.destroy().done(function (err)
+		{
+			if (err)
+				return res.json(
+				{
+					success: false,
+					error: err
+				});
+			else
+				res.json(
+				{
+					success: true,
+					message: "Applications deleted"
+				});
+		});
 	}
 }
