@@ -1,35 +1,41 @@
-<div class="" id="appList">
-  <%- partial('partials/addNewApp')%>
-  <h2><span>Application list</span><span class="badge"><%= apps.length  %> </span> </h2>
-  <table class="table table-striped table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>UUID</th>
-        <th>App name</th>
-        <th>Actions</th>
-        <th>Delete!!!</th>
-      </tr>
-    </thead>
-    <tbody>
-      
-      <% _.each(apps, function (app) { %>
-        <%if (app.active) { %>
-          <tr id="<%= app.id %>" class="success">
-        <% } else { %>
-          <tr id="<%= app.id %>" class="warning">
-        <% } %>
-        <td><span><%= app.uuid %></span></td>
-        <td><span><%= app.name %></span></td>
-        <td>
-          <button type="button" <% if( app.active ) { %> disabled="disabled" <% } %> data-appid="<%= app.id %>" class="btn btn-success enableApp">Enable</button>
-          <button type="button" <%if( !app.active ) { %>  disabled="disabled" <% } %>  data-appid="<%= app.id %>" class="btn btn-warning disableApp">Disable</button>
-          <a href="/environment/getEnvs?appUUID=<%= app.uuid %>" ><button type="button" class="btn btn-info ">Show Envs</button></a>
-        </td>
-        <td>
-          <button type="button" data-appid="<%= app.id %>"  class="btn btn-danger deleteApp">Delete</button>
-        </td>
-      </tr>
-      <% }) %>
-    </tbody>
-  </table>
+<div id="mainContainer">
+  <div class="page-header">
+    <h1 data-bind="text: appName()"></h1>
+  </div>
+  <div id="envList" class="col-lg-2">
+    <ul class="list-group" data-bind="foreach: envs, visible: envs().length > 0" >
+      <li class="list-group-item" data-bind="click: $root.openConfs">
+        <span  data-bind="text: name"></span>
+        <span class="badge" data-bind="text: confs().length"></span>
+      </li>
+    </ul>
+  </div>
+  <div class="col-lg-10" bind-data="visible: confs().length > 0">
+    <%- partial('partials/tmp/tmp')%>
+    <%- partial('partials/app/addNew')%>
+    <ul class="list-group " data-bind="foreach: confs">
+      <li class="list-group-item">
+        <ul class="nav nav-tabs">
+          <li><a href="#info" class="active" data-toggle="tab">Info</a></li>
+          <li><a href="#data" data-toggle="tab">Data</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active">
+            <div class="panel panel-primary">
+            <div class="panel-heading">
+              Conf UUID : <span class="panel-title" data-bind="text: uuid"></span>
+            </div>
+            <div class="panel-body">
+              sadasdasasd
+            </div>
+          </div>
+          </div>
+          <div class="tab-pane" id="data">
+            <code  data-bind="text: ko.toJSON(data)"></code>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
 </div>
+<script src="/linker/js/models/application.js"></script>

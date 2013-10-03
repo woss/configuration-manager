@@ -38,5 +38,25 @@ module.exports = {
 		{
 			res.json(envs);
 		});
+	},
+	deleteAll: function (req, res)
+	{
+		// For example, to delete a user named Johnny,
+		Environment.destroy().done(function (err)
+		{
+			if (err)
+				return res.json(
+				{
+					success: false,
+					error: err
+				});
+			else
+				res.json(
+				{
+					success: true,
+					message: "Environments deleted"
+				});
+		});
 	}
+
 };
