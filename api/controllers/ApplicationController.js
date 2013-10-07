@@ -63,7 +63,7 @@ module.exports = {
 							{
 								appUUID: app.uuid,
 								envUUID: env.uuid,
-								baseConf: true,
+								baseConfig: true,
 								data:
 								{}
 							})
@@ -86,21 +86,52 @@ module.exports = {
 
 	deleteAll: function (req, res)
 	{
+		resJson = {
+			success: true
+		};
 		// For example, to delete a user named Johnny,
 		Application.destroy().done(function (err)
 		{
 			if (err)
-				return res.json(
-				{
+				resJson = {
 					success: false,
 					error: err
-				});
+				};
 			else
-				res.json(
-				{
+				resJson = {
 					success: true,
 					message: "Applications deleted"
-				});
+				};
 		});
+		// For example, to delete a user named Johnny,
+		Environment.destroy().done(function (err)
+		{
+			if (err)
+				resJson = {
+					success: false,
+					error: err
+				};
+			else
+				resJson = {
+					success: true,
+					message: "Environments deleted"
+				};
+		});
+		// For example, to delete a user named Johnny,
+		Configuration.destroy().done(function (err)
+		{
+			if (err)
+				resJson = {
+					success: false,
+					error: err
+				};
+			else
+				resJson = {
+					success: true,
+					message: "Configuration deleted"
+				};
+		});
+
+		return res.json(resJson);
 	}
 }

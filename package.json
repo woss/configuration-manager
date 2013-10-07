@@ -21,7 +21,10 @@
 		"passport-http": "",
 		"passport-local": "",
 		"coffee-script": "",
-		"less": ""
+		"less": "",
+		"JSONPath": "",
+		"xregexp": "",
+		"deepmerge": ""
 
 	},
 	"scripts":

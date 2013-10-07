@@ -4,8 +4,31 @@
  * @module    :: Controller
  * @description :: Contains logic for handling requests.
  */
+var _ = require('underscore');
+var jsonpath = require('JSONPath').eval;
+var XRegExp = require('xregexp').XRegExp;
+var util = require('util');
+var merge = require('deepmerge');
+var Hash = require("hashish");
+
+replacePaths = function (data, cb)
+{
+	var regex = XRegExp("\\{\\+.*?\\+\\}/");
+	var dataString = JSON.stringify(data);
+	var match = XRegExp.replace(dataString, regex, function (_resp)
+	{
+		console.log(_resp[0]);
+		return '';
+	});
+	// var match = XRegExp.exec(dataString, regex);
+	// regexRes = dataString.match(regex);
+	console.log(util.inspect(match, false, null))
+	return cb(data);
+}
 
 module.exports = {
+
+	verifyStructure: function ($) {},
 
 	/**
 	 * Get configuration main method
@@ -33,14 +56,14 @@ module.exports = {
 		{
 			if (err)
 			{
-				res.send(500,
+				res.json(500,
 				{
 					error: "Ooops ERROR " + JSON.stringify(err)
 				});
 			}
 			else if (_bconf.length == 0)
 			{
-				res.send(500,
+				res.json(500,
 				{
 					error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
 				});
@@ -48,8 +71,7 @@ module.exports = {
 			else
 			{
 				var baseConf = _bconf[0].data;
-
-				// res.send(baseConf);
+				var cloneBaseConf = Hash.clone(baseConf);
 
 				Configuration.find(
 				{
@@ -59,25 +81,29 @@ module.exports = {
 				{
 					if (err)
 					{
-						res.send(500,
+						res.json(500,
 						{
 							error: "Ooops ERROR " + JSON.stringify(err)
 						});
 					}
 					else if (_bconf.length == 0)
 					{
-						res.send(500,
+						res.json(500,
 						{
 							error: "There is no config settings!!!! Create it!!!!"
 						});
 					}
 					else
 					{
-						var _ = require('underscore'),
-							currentConf = conf[0].data;
+						var currentConf = conf[0].data;
 
-						var mergedConf = _.extend(baseConf, currentConf);
-						res.send(mergedConf);
+						var mergedConf = merge(cloneBaseConf, currentConf);
+						replacePaths(mergedConf, function (resp)
+						{
+							console.log(resp);
+							res.json(resp);
+						});
+
 					}
 				});
 			}

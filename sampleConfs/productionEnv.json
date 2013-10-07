@@ -1,0 +1,12 @@
+{
+	"root_path": "/home/danijel/git/myApplication.git",
+	"db":
+	{
+		"dev":
+		{
+			"username": "danijelDev",
+			"password": "danijelDev",
+			"host": "http://danijel.devbox.dev:3308"
+		}
+	}
+}

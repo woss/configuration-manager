@@ -1,18 +1,39 @@
-<div id="mainContainer">
+<div id="mainContainer" bind-data="visible: appInfo()">
+  <%- partial('partials/app/addNew')%>
+  <%- partial('partials/env/addNew')%>
   <div class="page-header">
     <h1 data-bind="text: appName()"></h1>
+    <div class="navbar navbar-default navbar-fixed">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" data-bind="click: appInfoModal" data-toggle="modal" href="#appInfo">Aplication Info</a>
+        </div>
+        <div class="navbar-collapse collapse navbar-responsive-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="" data-bind="click: showModal">Delete</a></li>
+            <li><a href="#" data-toggle="modal" data-bind="click: $root.changeApp">Change</a></li>
+            <li><a href="#addEnv" data-toggle="modal">Add Environment</a></li>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div>
   </div>
-  <div id="envList" class="col-lg-2">
-    <ul class="list-group" data-bind="foreach: envs, visible: envs().length > 0" >
+  <div id="envList" class="col-lg-2" >
+    <ul class="list-group" data-bind="foreach: envs" >
       <li class="list-group-item" data-bind="click: $root.openConfs">
         <span  data-bind="text: name"></span>
         <span class="badge" data-bind="text: confs().length"></span>
       </li>
     </ul>
   </div>
-  <div class="col-lg-10" bind-data="visible: confs().length > 0">
-    <%- partial('partials/tmp/tmp')%>
-    <%- partial('partials/app/addNew')%>
+  <div class="col-lg-10">
+    
+
     <ul class="list-group " data-bind="foreach: confs">
       <li class="list-group-item">
         <ul class="nav nav-tabs">
