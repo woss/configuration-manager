@@ -5,8 +5,10 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jp = require('JSONPath').eval;
-var XRegExp = require('xregexp').XRegExp;
+var jp = require('JSONPath')
+	.eval;
+var XRegExp = require('xregexp')
+	.XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
@@ -35,9 +37,9 @@ replacePaths = function (data, cb)
 		var valuePath = jp(data, searchPath);
 		var replacePlacehodler = '{+/' + placeHolder + '+}';
 
-		// console.log(searchPath);
-		// console.log(valuePath[0]);
-		// console.log(replacePlacehodler);
+		console.log(searchPath);
+		console.log(valuePath[0]);
+		console.log(replacePlacehodler);
 		var dataString = dataString.replace(replacePlacehodler, valuePath[0]);
 
 	};
@@ -70,80 +72,83 @@ module.exports = {
 		{
 			appUUID: appUUID,
 			baseConfig: true
-		}).done(function (err, _bconf)
-		{
-			if (err)
+		})
+			.done(function (err, _bconf)
 			{
-				res.json(500,
+				if (err)
 				{
-					error: "Ooops ERROR " + JSON.stringify(err)
-				});
-			}
-			else if (_bconf.length == 0)
-			{
-				res.json(500,
-				{
-					error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
-				});
-			}
-			else
-			{
-				var baseConf = _bconf[0].data;
-				var cloneBaseConf = Hash.clone(baseConf);
-
-				Configuration.find(
-				{
-					envUUID: envUUID,
-					appUUID: appUUID
-				}).done(function (err, conf)
-				{
-					if (err)
+					res.json(500,
 					{
-						res.json(500,
-						{
-							error: "Ooops ERROR " + JSON.stringify(err)
-						});
-					}
-					else if (_bconf.length == 0)
+						error: "Ooops ERROR " + JSON.stringify(err)
+					});
+				}
+				else if (_bconf.length == 0)
+				{
+					res.json(500,
 					{
-						res.json(500,
-						{
-							error: "There is no config settings!!!! Create it!!!!"
-						});
-					}
-					else
+						error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
+					});
+				}
+				else
+				{
+					var baseConf = _bconf[0].data;
+					var cloneBaseConf = Hash.clone(baseConf);
+
+					Configuration.find(
 					{
-						var currentConf = conf[0].data;
-
-						var mergedConf = merge(cloneBaseConf, currentConf);
-						replacePaths(mergedConf, function (resp)
+						envUUID: envUUID,
+						appUUID: appUUID
+					})
+						.done(function (err, conf)
 						{
-							// console.log(resp);
-							res.json(resp);
-						});
+							if (err)
+							{
+								res.json(500,
+								{
+									error: "Ooops ERROR " + JSON.stringify(err)
+								});
+							}
+							else if (_bconf.length == 0)
+							{
+								res.json(500,
+								{
+									error: "There is no config settings!!!! Create it!!!!"
+								});
+							}
+							else
+							{
+								var currentConf = conf[0].data;
 
-					}
-				});
-			}
-		});
+								var mergedConf = merge(cloneBaseConf, currentConf);
+								replacePaths(mergedConf, function (resp)
+								{
+									// console.log(resp);
+									res.json(resp);
+								});
+
+							}
+						});
+				}
+			});
 	},
 	deleteAll: function (req, res)
 	{
 		// For example, to delete a user named Johnny,
-		Configuration.destroy().done(function (err)
-		{
-			if (err)
-				return res.json(
-				{
-					success: false,
-					error: err
-				});
-			else
-				res.json(
-				{
-					success: true,
-					message: "Configurations deleted"
-				});
-		});
+		Configuration.destroy()
+			.done(function (err)
+			{
+				if (err)
+					return res.json(
+					{
+						success: false,
+						error: err
+					});
+				else
+					res.json(
+					{
+						success: true,
+						message: "Configurations deleted"
+					});
+			});
 	}
 };
