@@ -5,7 +5,7 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jsonpath = require('JSONPath').eval;
+var jp = require('JSONPath').eval;
 var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
@@ -13,17 +13,35 @@ var Hash = require("hashish");
 
 replacePaths = function (data, cb)
 {
-	var regex = XRegExp("\\{\\+.*?\\+\\}/");
-	var dataString = JSON.stringify(data);
-	var match = XRegExp.replace(dataString, regex, function (_resp)
+	if (!_.isString(data))
+		var dataString = JSON.stringify(data);
+	else
+		var dataString = data;
+
+	// console.log(typeof data);
+	// console.log(typeof dataString);
+	var matches = XRegExp.matchRecursive(dataString, "\\{\\+\/", "\\+\\}", 'g',
 	{
-		console.log(_resp[0]);
-		return '';
+		valueNames: [null, null, 'value', null],
 	});
-	// var match = XRegExp.exec(dataString, regex);
-	// regexRes = dataString.match(regex);
-	console.log(util.inspect(match, false, null))
-	return cb(data);
+	// console.log(matches);
+	// console.log(dataString);
+	for (var i = matches.length - 1; i >= 0; i--)
+	{
+		// console.log(matches[i]);
+		// console.log(typeof matches[i]);
+		var placeHolder = matches[i].name;
+		var searchPath = "$.." + placeHolder.replace(/\//g, '.');
+		var valuePath = jp(data, searchPath);
+		var replacePlacehodler = '{+/' + placeHolder + '+}';
+
+		// console.log(searchPath);
+		// console.log(valuePath[0]);
+		// console.log(replacePlacehodler);
+		var dataString = dataString.replace(replacePlacehodler, valuePath[0]);
+
+	};
+	return cb(JSON.parse(dataString));
 }
 
 module.exports = {
@@ -100,7 +118,7 @@ module.exports = {
 						var mergedConf = merge(cloneBaseConf, currentConf);
 						replacePaths(mergedConf, function (resp)
 						{
-							console.log(resp);
+							// console.log(resp);
 							res.json(resp);
 						});
 

@@ -16,3 +16,8 @@ Problems that will be solved with CM (at least i see it like this) :
 3. secure
 4. it can be distributed
 5. scales horizontally
+
+
+### To be done
+
+* parsing placeholers `{+stuff+}` 
