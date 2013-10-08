@@ -21,3 +21,11 @@ Problems that will be solved with CM (at least i see it like this) :
 ### To be done
 
 * parsing placeholers `{+stuff+}` 
+
+### Versions 
+
+#### _v0.1_
+
+* added parsing of placeholders
+* sample of confs
+* refactoring of knockoutJS
