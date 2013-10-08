@@ -4,8 +4,49 @@
  * @module    :: Controller
  * @description :: Contains logic for handling requests.
  */
+var _ = require('underscore');
+var jp = require('JSONPath').eval;
+var XRegExp = require('xregexp').XRegExp;
+var util = require('util');
+var merge = require('deepmerge');
+var Hash = require("hashish");
+
+replacePaths = function (data, cb)
+{
+	if (!_.isString(data))
+		var dataString = JSON.stringify(data);
+	else
+		var dataString = data;
+
+	// console.log(typeof data);
+	// console.log(typeof dataString);
+	var matches = XRegExp.matchRecursive(dataString, "\\{\\+\/", "\\+\\}", 'g',
+	{
+		valueNames: [null, null, 'value', null],
+	});
+	// console.log(matches);
+	// console.log(dataString);
+	for (var i = matches.length - 1; i >= 0; i--)
+	{
+		// console.log(matches[i]);
+		// console.log(typeof matches[i]);
+		var placeHolder = matches[i].name;
+		var searchPath = "$.." + placeHolder.replace(/\//g, '.');
+		var valuePath = jp(data, searchPath);
+		var replacePlacehodler = '{+/' + placeHolder + '+}';
+
+		// console.log(searchPath);
+		// console.log(valuePath[0]);
+		// console.log(replacePlacehodler);
+		var dataString = dataString.replace(replacePlacehodler, valuePath[0]);
+
+	};
+	return cb(JSON.parse(dataString));
+}
 
 module.exports = {
+
+	verifyStructure: function ($) {},
 
 	/**
 	 * Get configuration main method
@@ -33,14 +74,14 @@ module.exports = {
 		{
 			if (err)
 			{
-				res.send(500,
+				res.json(500,
 				{
 					error: "Ooops ERROR " + JSON.stringify(err)
 				});
 			}
 			else if (_bconf.length == 0)
 			{
-				res.send(500,
+				res.json(500,
 				{
 					error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
 				});
@@ -48,8 +89,7 @@ module.exports = {
 			else
 			{
 				var baseConf = _bconf[0].data;
-
-				// res.send(baseConf);
+				var cloneBaseConf = Hash.clone(baseConf);
 
 				Configuration.find(
 				{
@@ -59,45 +99,51 @@ module.exports = {
 				{
 					if (err)
 					{
-						res.send(500,
+						res.json(500,
 						{
 							error: "Ooops ERROR " + JSON.stringify(err)
 						});
 					}
 					else if (_bconf.length == 0)
 					{
-						res.send(500,
+						res.json(500,
 						{
 							error: "There is no config settings!!!! Create it!!!!"
 						});
 					}
 					else
 					{
-						var _ = require('underscore'),
-							currentConf = conf[0].data;
+						var currentConf = conf[0].data;
 
-						var mergedConf = _.extend(baseConf, currentConf);
-						res.send(mergedConf);
+						var mergedConf = merge(cloneBaseConf, currentConf);
+						replacePaths(mergedConf, function (resp)
+						{
+							// console.log(resp);
+							res.json(resp);
+						});
+
 					}
 				});
 			}
 		});
+	},
+	deleteAll: function (req, res)
+	{
+		// For example, to delete a user named Johnny,
+		Configuration.destroy().done(function (err)
+		{
+			if (err)
+				return res.json(
+				{
+					success: false,
+					error: err
+				});
+			else
+				res.json(
+				{
+					success: true,
+					message: "Configurations deleted"
+				});
+		});
 	}
-};
-module.exports.blueprints = {
-
-	// Expose a route for every method,
-	// e.g.
-	// `/auth/foo` => `foo: function (req, res) {}`
-	actions: true,
-
-	// Expose a RESTful API, e.g.
-	// `post /auth` => `create: function (req, res) {}`
-	rest: true,
-
-	// Expose simple CRUD shortcuts, e.g.
-	// `/auth/create` => `create: function (req, res) {}`
-	// (useful for prototyping)
-	shortcuts: true
-
 };

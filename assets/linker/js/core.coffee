@@ -1,4 +1,5 @@
-ch =
+class ch
+  user : {}
   make_base_auth: (user, password) ->
     hash = undefined
     tok = undefined
@@ -55,4 +56,6 @@ ch =
     }
     $("#flash p").html(message)
     $("#flash").addClass(typeList[type]).show()
+
+ch = new ch();
 

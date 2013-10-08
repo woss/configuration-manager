@@ -4,14 +4,23 @@
   <title><%- title %></title>
   <!-- Viewport mobile tag for sensible mobile support -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1" name=
-  "viewport"><!--STYLES-->
-<link rel="stylesheet" href="/linker/styles/auth.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap-theme.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap-theme.min.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap.css">
-<link rel="stylesheet" href="/linker/styles/bootstrap.min.css">
-<link rel="stylesheet" href="/linker/styles/theme.css">
-<!--STYLES END-->
+  "viewport">
+  <!--STYLES-->
+  <link rel="stylesheet" href="/linker/styles/auth.css">
+  <link rel="stylesheet" href="/linker/styles/bootstrap.min.css">
+  <link rel="stylesheet" href="/linker/styles/theme.css">
+  <!--STYLES END-->
+
+<script src="/linker/js/underscore-min.js"></script>
+<script src="/linker/js/jquery-2.0.3.min.js"></script>
+<script src="/linker/js/knockout-2.3.0.js"></script>
+<script src="/linker/js/socket.io.js"></script>
+<script src="/linker/js/sails.io.js"></script>
+<script src="/linker/js/app.js"></script>
+<script src="/linker/js/core.js"></script>
+<script src="/linker/js/bindings.js"></script>
+<script src="/linker/js/bootstrap/bootstrap.js"></script>
+<script src="/linker/js/endBindings.js"></script>
 </head>
 
 <body>
@@ -19,65 +28,11 @@
   <!-- Include the view file for the current controller/route -->
 
   <div class="container">
-    <div class="alert alert-dismissable" id="flash" style="display:none">
-      <button class="close" data-dismiss="alert" type="button">×</button> 
-      <!-- <h4>Warning!</h4> -->
-
-      <p></p>
-    </div>
     <% if (req.user) { %>
-    <div class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="/dash"><%= title%></a>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar-main">
-          <ul class="nav navbar-nav">
-            <li>
-              <a href="#help">Help</a>
-            </li>
-            <li>
-              <a href="http://dmaricic.wordpress.com" target="_blank">Blog</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id=
-              "userProfile">Welcome <%= req.user.username %> <span class=
-              "caret"></span></a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="#profile" tabindex="-1">Profile</a>
-                </li>
-                <li class="divider"></li>
-                <li>
-                  <a href="#setting" tabindex="-1">Settings</a>
-                </li>
-                <li>
-                  <a href="/logout" tabindex="-1">Logout</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <ul class="breadcrumb" style="margin-bottom: 5px;">
-      <li>
-        <a href="/dash">Home</a>
-      </li>
-    </ul>
+      <script>ch.user.id="<%=req.user.id%>";</script>
+      <%- partial('dash/partials/dash/navBar') %>
     <% } %>
     <%- body %>
-  </div><!--SCRIPTS-->
-<script src="/linker/js/socket.io.js"></script>
-<script src="/linker/js/sails.io.js"></script>
-<script src="/linker/js/app.js"></script>
-<script src="/linker/js/core.js"></script>
-<script src="/linker/js/jquery.min.js"></script>
-<script src="/linker/js/bindings.js"></script>
-<script src="/linker/js/bootstrap/bootstrap.js"></script>
-<script src="/linker/js/endBindings.js"></script>
-<!--SCRIPTS END-->
+  </div>
 </body>
 </html>
