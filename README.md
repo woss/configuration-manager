@@ -29,3 +29,4 @@ Problems that will be solved with CM (at least i see it like this) :
 * added parsing of placeholders
 * sample of confs
 * refactoring of knockoutJS
+* dependancy tracing for variables in confs 

@@ -22,33 +22,61 @@ replacePaths = function (data, cb)
 
 	// console.log(typeof data);
 	// console.log(typeof dataString);
+	// 
 	var matches = XRegExp.matchRecursive(dataString, "\\{\\+\/", "\\+\\}", 'g',
 	{
 		valueNames: [null, null, 'value', null],
 	});
-	// console.log(matches);
-	// console.log(dataString);
+
+	// Let's loop through matches 
 	for (var i = matches.length - 1; i >= 0; i--)
 	{
 		// console.log(matches[i]);
 		// console.log(typeof matches[i]);
+
 		var placeHolder = matches[i].name;
+
+		// JSONpath  parsing
 		var searchPath = "$.." + placeHolder.replace(/\//g, '.');
-		var valuePath = jp(data, searchPath);
+		var valuePath = jp(data, searchPath)[0];
+		// console.log(placeHolder);
+		// console.log(valuePath);
+		if (!_.isString(valuePath))
+			return cb(
+			{
+				success: false,
+				error: "Error in assiging dependent variable of {" + placeHolder + "}"
+			});
+
+		// We should check dependancies of placeholders
+		// start
+		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
+		var matchDependancy = XRegExp.exec(valuePath, regex);
+		console.log(typeof matchDependancy);
+		console.log(matchDependancy);
+		return cb(
+		{
+			success: true,
+			data: matchDependancy[0]
+		});
+		// end
+
 		var replacePlacehodler = '{+/' + placeHolder + '+}';
 
-		console.log(searchPath);
-		console.log(valuePath[0]);
-		console.log(replacePlacehodler);
-		var dataString = dataString.replace(replacePlacehodler, valuePath[0]);
-
+		// console.log(searchPath);
+		// console.log(valuePath);
+		// console.log(replacePlacehodler);
+		var dataString = dataString.replace(replacePlacehodler, valuePath);
 	};
-	return cb(JSON.parse(dataString));
-}
+	// return cb(
+	// {
+	//  success: true,
+	//  data: JSON.parse(dataString)
+	// });
+},
+verifyStructure = function ($) {},
 
 module.exports = {
-
-	verifyStructure: function ($) {},
 
 	/**
 	 * Get configuration main method
@@ -123,7 +151,14 @@ module.exports = {
 								replacePaths(mergedConf, function (resp)
 								{
 									// console.log(resp);
-									res.json(resp);
+									if (resp.success)
+										res.json(resp.data);
+									// res.json(mergedConf);
+									else
+										res.json(500,
+										{
+											error: resp.error
+										});
 								});
 
 							}
