@@ -20,7 +20,17 @@ Problems that will be solved with CM (at least i see it like this) :
 
 ### To be done
 
-* parsing placeholers `{+stuff+}` 
+* dependency tracing for variables in confs 
+* make it like this- first level ones in array dependency are included  and tracked parsed, replacement occur after binding
+	* root_path = `/path`
+	* base_path = `{+/root_path+}/something` ==> 1st level dependency
+	* some_path = `{+/base_path+}/something` ==> 2nd level dependency, should parse _base_path_ first
+	* some_other_path = `{+/some_path+}/something` ==> same here
+		* trace back placeHolder until no dependency
+		* resolve root_path
+		* resolve base_path
+		* resolve some_path
+		* resolve some_other_path
 
 ### Versions 
 
@@ -29,4 +39,4 @@ Problems that will be solved with CM (at least i see it like this) :
 * added parsing of placeholders
 * sample of confs
 * refactoring of knockoutJS
-* dependancy tracing for variables in confs 
+* parsing placeholers `{+stuff+}`

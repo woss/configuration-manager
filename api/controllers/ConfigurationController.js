@@ -5,10 +5,8 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jp = require('JSONPath')
-	.eval;
-var XRegExp = require('xregexp')
-	.XRegExp;
+var jp = require('JSONPath').eval;
+var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
@@ -25,67 +23,68 @@ replacePaths = function (data, cb)
 	// 
 	var matches = XRegExp.matchRecursive(dataString, "\\{\\+\/", "\\+\\}", 'g',
 	{
-		valueNames: [null, null, 'value', null],
+		valueNames: ['literal', null, 'value', null],
+		escapeChar: '\\'
 	});
-
+	console.log(matches);
 	// Let's loop through matches 
 	for (var i = matches.length - 1; i >= 0; i--)
 	{
-		// console.log(matches[i]);
-		// console.log(typeof matches[i]);
+		// // console.log(matches[i]);
+		// // console.log(typeof matches[i]);
 
-		var placeHolder = matches[i].name;
+		// var placeHolder = matches[i].name;
 
-		// JSONpath  parsing
-		var searchPath = "$.." + placeHolder.replace(/\//g, '.');
-		var valuePath = jp(data, searchPath)[0];
-		// console.log(placeHolder);
+		// // JSONpath  parsing
+		// var searchPath = "$.." + placeHolder.replace(/\//g, '.');
+		// var valuePath = jp(data, searchPath)[0];
+		// // console.log(placeHolder);
+		// // console.log(valuePath);
+		// if (!_.isString(valuePath))
+		// 	return cb(
+		// 	{
+		// 		success: false,
+		// 		error: "Error in assiging dependent variable of {" + placeHolder + "}"
+		// 	});
+
+		// // We should check dependancies of placeholders
+		// // start
+		// // var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
+		// // var matchDependancy = XRegExp.exec(valuePath, regex);
+		// var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
+		// {
+		// 	valueNames: ['between', null, 'value', null],
+		// });
+
+		// if (_.isObject(matchDependancy))
+		// {
+		// 	console.log(matchDependancy[0]);
+		// 	console.log("$.." + matchDependancy[0].name.replace(/\//g, '.'));
+		// 	var _valuePath = jp(valuePath, "$.." + matchDependancy[0].name.replace(/\//g, '.'));
+		// 	console.log(_valuePath);
+		// 	// return cb(
+		// 	// {
+		// 	//  success: true,
+		// 	//  data: matchDependancy[0]
+		// 	// });
+		// }
+
+		// // end
+
+		// var replacePlacehodler = '{+/' + placeHolder + '+}';
+
+		// console.log(searchPath);
 		// console.log(valuePath);
-		if (!_.isString(valuePath))
-			return cb(
-			{
-				success: false,
-				error: "Error in assiging dependent variable of {" + placeHolder + "}"
-			});
+		// console.log(replacePlacehodler);
+		// console.log("-------------");
 
-		// We should check dependancies of placeholders
-		// start
-		// var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
-		// var matchDependancy = XRegExp.exec(valuePath, regex);
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
-		{
-			valueNames: ['between', null, 'value', null],
-		});
-
-		if (_.isObject(matchDependancy))
-		{
-			console.log(matchDependancy[0]);
-			console.log("$.." + matchDependancy[0].name.replace(/\//g, '.'));
-			var _valuePath = jp(valuePath, "$.." + matchDependancy[0].name.replace(/\//g, '.'));
-			console.log(_valuePath);
-			// return cb(
-			// {
-			//  success: true,
-			//  data: matchDependancy[0]
-			// });
-		}
-
-		// end
-
-		var replacePlacehodler = '{+/' + placeHolder + '+}';
-
-		console.log(searchPath);
-		console.log(valuePath);
-		console.log(replacePlacehodler);
-		console.log("-------------");
-
-		var dataString = dataString.replace(replacePlacehodler, valuePath);
+		// var dataString = dataString.replace(replacePlacehodler, valuePath);
 	};
-  return cb(
-  {
-    success: true,
-    data: JSON.parse(dataString)
-  });
+	return cb(
+	{
+		success: true,
+		data: JSON.parse(dataString)
+	});
 },
 verifyStructure = function ($) {},
 
