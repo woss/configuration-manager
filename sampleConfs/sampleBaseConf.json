@@ -2,9 +2,9 @@
 	"root_path": "/var/www/myApplication",
 	"base_path": "{+/root_path+}/www/public",
 	"test_db_path": "{+/db/default/host+}__something",
-	"test_db_path12": "{+/db/default/host2+}__something",
-	"test_db_path112": "{+/db/defaulwt/host+}__something",
-	"test_db_path112": "{+/db+}__something",
+	"test_db_path12": "{+/db/default/host+}__something",
+	"test_db_path112": "{+/db/default/host+}__something",
+	"test_db_path112": "{+/base_path+}__something",
 	"db":
 	{
 		"default":

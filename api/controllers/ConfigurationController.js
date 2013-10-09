@@ -50,29 +50,42 @@ replacePaths = function (data, cb)
 
 		// We should check dependancies of placeholders
 		// start
-		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
-		var matchDependancy = XRegExp.exec(valuePath, regex);
-		console.log(typeof matchDependancy);
-		console.log(matchDependancy);
-		return cb(
+		// var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
+		// var matchDependancy = XRegExp.exec(valuePath, regex);
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
 		{
-			success: true,
-			data: matchDependancy[0]
+			valueNames: ['between', null, 'value', null],
 		});
+
+		if (_.isObject(matchDependancy))
+		{
+			console.log(matchDependancy[0]);
+			console.log("$.." + matchDependancy[0].name.replace(/\//g, '.'));
+			var _valuePath = jp(valuePath, "$.." + matchDependancy[0].name.replace(/\//g, '.'));
+			console.log(_valuePath);
+			// return cb(
+			// {
+			//  success: true,
+			//  data: matchDependancy[0]
+			// });
+		}
+
 		// end
 
 		var replacePlacehodler = '{+/' + placeHolder + '+}';
 
-		// console.log(searchPath);
-		// console.log(valuePath);
-		// console.log(replacePlacehodler);
+		console.log(searchPath);
+		console.log(valuePath);
+		console.log(replacePlacehodler);
+		console.log("-------------");
+
 		var dataString = dataString.replace(replacePlacehodler, valuePath);
 	};
-	// return cb(
-	// {
-	//  success: true,
-	//  data: JSON.parse(dataString)
-	// });
+  return cb(
+  {
+    success: true,
+    data: JSON.parse(dataString)
+  });
 },
 verifyStructure = function ($) {},
 
