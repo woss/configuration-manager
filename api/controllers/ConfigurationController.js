@@ -5,88 +5,82 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jp = require('JSONPath').eval;
+var jsonPath = require('JSONPath').eval;
 var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
 
-replacePaths = function (data, cb)
-{
-	if (!_.isString(data))
-		var dataString = JSON.stringify(data);
-	else
-		var dataString = data;
-
-	// console.log(typeof data);
-	// console.log(typeof dataString);
-	// 
-	var matches = XRegExp.matchRecursive(dataString, "\\{\\+\/", "\\+\\}", 'g',
+var Conf = {
+	_json:
+	{},
+	json: '',
+	replacePaths: function (_json, cb)
 	{
-		valueNames: ['literal', null, 'value', null],
-		escapeChar: '\\'
-	});
-	console.log(matches);
-	// Let's loop through matches 
-	for (var i = matches.length - 1; i >= 0; i--)
+		if (_.isObject(_json))
+			var json = JSON.stringify(_json)
+
+		Conf._json = _json;
+		Conf.json = json;
+
+		var matches = XRegExp.matchRecursive(json, "\\{\\+\/", "\\+\\}", 'g',
+		{
+			valueNames: [null, null, 'match', null]
+		});
+		matches.forEach(function (item)
+		{
+			replacePattern = item.name
+			Conf.recursiveFunction(replacePattern)
+		});
+
+		return cb(
+		{
+			success: true,
+			data: JSON.parse(Conf.json)
+		});
+	},
+	recursiveFunction: function (item, searchPath)
 	{
-		// // console.log(matches[i]);
-		// // console.log(typeof matches[i]);
+		searchPath = searchPath || "";
+		replacePattern = item
 
-		// var placeHolder = matches[i].name;
+		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
 
-		// // JSONpath  parsing
-		// var searchPath = "$.." + placeHolder.replace(/\//g, '.');
-		// var valuePath = jp(data, searchPath)[0];
-		// // console.log(placeHolder);
-		// // console.log(valuePath);
-		// if (!_.isString(valuePath))
-		// 	return cb(
-		// 	{
-		// 		success: false,
-		// 		error: "Error in assiging dependent variable of {" + placeHolder + "}"
-		// 	});
+		searchPath = "$.." + replacePattern.replace(/\//g, '.');
 
-		// // We should check dependancies of placeholders
-		// // start
-		// // var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
-		// // var matchDependancy = XRegExp.exec(valuePath, regex);
-		// var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
-		// {
-		// 	valueNames: ['between', null, 'value', null],
-		// });
+		valuePath = jsonPath(Conf._json, searchPath)[0];
 
-		// if (_.isObject(matchDependancy))
-		// {
-		// 	console.log(matchDependancy[0]);
-		// 	console.log("$.." + matchDependancy[0].name.replace(/\//g, '.'));
-		// 	var _valuePath = jp(valuePath, "$.." + matchDependancy[0].name.replace(/\//g, '.'));
-		// 	console.log(_valuePath);
-		// 	// return cb(
-		// 	// {
-		// 	//  success: true,
-		// 	//  data: matchDependancy[0]
-		// 	// });
-		// }
+		if (!_.isEmpty(searchPath) && searchPath != replacePattern)
+		{
+			console.log('replacePattern ' + replacePattern)
+			console.log('master node for replacement is ' + searchPath);
+			searchPath = "$.." + searchPath.replace(/\//g, '.');
+			Conf.replaceJson(replacePattern, valuePath);
+		}
 
-		// // end
+		//var matchDependancy = XRegExp.exec(valuePath, regex);
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0]
 
-		// var replacePlacehodler = '{+/' + placeHolder + '+}';
-
-		// console.log(searchPath);
-		// console.log(valuePath);
-		// console.log(replacePlacehodler);
-		// console.log("-------------");
-
-		// var dataString = dataString.replace(replacePlacehodler, valuePath);
-	};
-	return cb(
+		if (!_.isEmpty(matchDependancy))
+		{
+			console.log('-----------------')
+			console.log('In search path ' + searchPath)
+			console.log('Value is ' + valuePath);
+			console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
+			console.log('-----------------')
+			Conf.recursiveFunction(matchDependancy, replacePattern)
+		}
+		// here is replacement
+		Conf.replaceJson(replacePattern, valuePath);
+	},
+	replaceJson: function (placeHolder, value)
 	{
-		success: true,
-		data: JSON.parse(dataString)
-	});
-},
-verifyStructure = function ($) {},
+		console.log('Replacing ' + placeHolder + " with value " + value)
+		var replacePlacehodler = '{+/' + placeHolder + '+}';
+		Conf.json = Conf.json.replace(replacePlacehodler, value);
+		console.log('+++++++++++++++')
+	}
+};
 
 module.exports = {
 
@@ -160,7 +154,7 @@ module.exports = {
 								var currentConf = conf[0].data;
 
 								var mergedConf = merge(cloneBaseConf, currentConf);
-								replacePaths(mergedConf, function (resp)
+								Conf.replacePaths(mergedConf, function (resp)
 								{
 									// console.log(resp);
 									if (resp.success)
