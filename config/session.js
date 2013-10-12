@@ -25,7 +25,7 @@ module.exports.session = {
 	// on localhost is expected.
 	// Read more about options at: https://github.com/visionmedia/connect-redis
 	//
-	host: 'localhost',
+	host: 'dmaricic.com',
 	port: 6379,
 	ttl: 15000,
 	db: 1,

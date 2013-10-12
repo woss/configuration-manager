@@ -5,8 +5,10 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jsonPath = require('JSONPath').eval;
-var XRegExp = require('xregexp').XRegExp;
+var jsonPath = require('JSONPath')
+	.eval;
+var XRegExp = require('xregexp')
+	.XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
@@ -15,6 +17,12 @@ var Conf = {
 	_json:
 	{},
 	json: '',
+	/**
+	 * Replacing placeholders in given configuration object
+	 * @param  {[object]}			_json Configuration from DB
+	 * @param  {Function} cb 	Regular callback
+	 * @return {[object]}     Return object
+	 */
 	replacePaths: function (_json, cb)
 	{
 		if (_.isObject(_json))
@@ -39,6 +47,13 @@ var Conf = {
 			data: JSON.parse(Conf.json)
 		});
 	},
+
+	/**
+	 * Recursive function that parses the placeholders and nodes
+	 * @param  {[string]} item  		Matched placeholder
+	 * @param  {[string]} searchPath  INitially empty, if dependency is found then we pass this
+	 * @return {[function]}            [description]
+	 */
 	recursiveFunction: function (item, searchPath)
 	{
 		searchPath = searchPath || "";
@@ -52,33 +67,38 @@ var Conf = {
 
 		if (!_.isEmpty(searchPath) && searchPath != replacePattern)
 		{
-			console.log('replacePattern ' + replacePattern)
-			console.log('master node for replacement is ' + searchPath);
+			// console.log('replacePattern ' + replacePattern)
+			// console.log('master node for replacement is ' + searchPath);
 			searchPath = "$.." + searchPath.replace(/\//g, '.');
 			Conf.replaceJson(replacePattern, valuePath);
 		}
 
-		//var matchDependancy = XRegExp.exec(valuePath, regex);
 		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0]
 
 		if (!_.isEmpty(matchDependancy))
 		{
-			console.log('-----------------')
-			console.log('In search path ' + searchPath)
-			console.log('Value is ' + valuePath);
-			console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
-			console.log('-----------------')
+			// console.log('-----------------')
+			// console.log('In search path ' + searchPath)
+			// console.log('Value is ' + valuePath);
+			// console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
+			// console.log('-----------------')
 			Conf.recursiveFunction(matchDependancy, replacePattern)
 		}
 		// here is replacement
 		Conf.replaceJson(replacePattern, valuePath);
 	},
+	/**
+	 * Small generic piece of code for replacement patternt
+	 * @param  {[string]} placeHolder
+	 * @param  {[string]} value
+	 * @return {[null]}             [description]
+	 */
 	replaceJson: function (placeHolder, value)
 	{
-		console.log('Replacing ' + placeHolder + " with value " + value)
+		// console.log('Replacing ' + placeHolder + " with value " + value)
 		var replacePlacehodler = '{+/' + placeHolder + '+}';
 		Conf.json = Conf.json.replace(replacePlacehodler, value);
-		console.log('+++++++++++++++')
+		// console.log('+++++++++++++++')
 	}
 };
 
@@ -166,7 +186,6 @@ module.exports = {
 											error: resp.error
 										});
 								});
-
 							}
 						});
 				}

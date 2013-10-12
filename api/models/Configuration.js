@@ -36,6 +36,11 @@ module.exports = {
 		{
 			type: "boolean",
 			defaultsTo: false
+		},
+		active:
+		{
+			type: "boolean",
+			defaultsTo: false
 		}
 
 	},
