@@ -5,10 +5,8 @@
  * @description :: Contains logic for handling requests.
  */
 var _ = require('underscore');
-var jsonPath = require('JSONPath')
-	.eval;
-var XRegExp = require('xregexp')
-	.XRegExp;
+var jsonPath = require('JSONPath').eval;
+var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");

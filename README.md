@@ -29,6 +29,7 @@ Problems that will be solved with CM (at least i see it like this) :
     * https://github.com/aq1018/mongoid-history **NOT**
     * http://hbase.apache.org/ **NOT**
 * when configuration is activated store it and push it to redis
+* refactor conf
 
 ### Historical Configurations
 
@@ -42,6 +43,8 @@ Diff solutions
 _Versioning MONGODB_
 
 http://support.mongohq.com/use-cases/document-versioning.html
+
+
  
   
 ### Versions 
