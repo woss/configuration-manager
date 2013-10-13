@@ -16,7 +16,7 @@
 		},
 		"main":
 		{
-			"username": "danijel",
+			"username": "{+/test_db_path112+}/{+/db/main/username+}",
 			"password": "123456",
 			"db_name": "confManager",
 			"host": "http://localhost:3307"

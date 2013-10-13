@@ -28,6 +28,7 @@ Problems that will be solved with CM (at least i see it like this) :
     * http://mongoid.org/en/mongoid/docs/extras.html#versioning **NOT**
     * https://github.com/aq1018/mongoid-history **NOT**
     * http://hbase.apache.org/ **NOT**
+* when configuration is activated store it and push it to redis
 
 ### Historical Configurations
 

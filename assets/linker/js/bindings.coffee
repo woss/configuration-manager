@@ -8,6 +8,7 @@ $ ->
       type: "POST"
       url: "login"
       async: true
+      data: {"username":'username',"password":'password'}
       beforeSend: (xhr) ->
         xhr.setRequestHeader "Authorization", authHash
       success: (xhr)->
@@ -15,7 +16,6 @@ $ ->
         window.location.href = "dash"
       error: (xhr, type) ->
         messageJSON = JSON.parse(xhr.responseText)
-        ch.showFlashMsg("w",messageJSON.message)
   # Bindings for Signup Button
   $("#signUpButton").on "click", (e) ->
     username = $("#usernameSP").val()

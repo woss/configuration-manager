@@ -25,7 +25,9 @@
 		"JSONPath": "",
 		"xregexp": "",
 		"deepmerge": "",
-		"hashish": ""
+		"hashish": "",
+		"redis": "",
+		"hiredis": ""
 
 	},
 	"scripts":

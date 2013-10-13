@@ -22,19 +22,18 @@ module.exports = {
 		{
 			if ((err) || (!user))
 			{
-
-				return res.send(
+				return res.json(
 				{
 					message: "There is an error with authorisation."
 				}, 401);
-				// res.send(err);
+				// res.json(err);
 			}
 			req.logIn(user, function (err)
 			{
 				if (err)
-					return res.send(err);
+					return res.json(err);
 
-				return res.send(
+				return res.json(
 				{
 					user: user,
 					message: "Logged in."
@@ -45,7 +44,7 @@ module.exports = {
 	logout: function (req, res)
 	{
 		req.logout();
-		res.send(
+		res.json(
 		{
 			message: "Logout successful."
 		});

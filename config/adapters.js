@@ -32,25 +32,25 @@ module.exports.adapters = {
 	},
 
 	// MySQL is the world's most popular relational database.
-	// Learn more: http://en.wikipedia.org/wiki/MySQL
-	mysql:
-	{
+	// // Learn more: http://en.wikipedia.org/wiki/MySQL
+	// mysql:
+	// {
 
-		module: 'sails-mysql',
-		host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
-		user: 'YOUR_MYSQL_USER',
-		// Psst.. You can put your password in config/local.js instead
-		// so you don't inadvertently push it up if you're using version control
-		password: 'YOUR_MYSQL_PASSWORD',
-		database: 'YOUR_MYSQL_DB'
-	},
+	// 	module: 'sails-mysql',
+	// 	host: 'YOUR_MYSQL_SERVER_HOSTNAME_OR_IP_ADDRESS',
+	// 	user: 'YOUR_MYSQL_USER',
+	// 	// Psst.. You can put your password in config/local.js instead
+	// 	// so you don't inadvertently push it up if you're using version control
+	// 	password: 'YOUR_MYSQL_PASSWORD',
+	// 	database: 'YOUR_MYSQL_DB'
+	// },
 	mongo:
 	{
 		module: 'sails-mongo',
 		host: 'dmaricic.com',
 		port: 27017,
-		// user: 'sailsjs',
-		// password: 'sailsjs',
-		database: 'sailsjsConfManager'
+		user: 'confManager',
+		password: 'confManager',
+		database: 'confManager'
 	}
 };

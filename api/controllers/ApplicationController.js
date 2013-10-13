@@ -39,7 +39,8 @@ module.exports = {
 					{
 						name: 'BASE',
 						appUUID: app.uuid,
-						baseEnv: true
+						baseEnv: true,
+						active: true,
 					})
 						.done(function (error, env)
 						{
@@ -48,6 +49,7 @@ module.exports = {
 								appUUID: app.uuid,
 								envUUID: env.uuid,
 								baseConfig: true,
+								active: true,
 								data:
 								{}
 							})
