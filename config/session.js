@@ -25,14 +25,12 @@ module.exports.session = {
 	// on localhost is expected.
 	// Read more about options at: https://github.com/visionmedia/connect-redis
 
-	host: 'localhost',
+	host: 'dmaricic.com',
 	port: 6379,
-	// host: 'dmaricic.com',
-	// port: 6379,
-	// ttl: 15000,
-	// db: 0,
-	// pass: 'wWSVeTz6L2i18am6alTfzyrNSIanxWZHYIHJYlNm8i30JXQnWxrpNKEcR7/0k7AsdXKoc8yoOqLN+JoJZadzaydEPIFyX0uKNV/46mAylDNSwIuuUaIF0Kl7l5w6OUacPJQyMw==',
-	// prefix: 'session:'
+	ttl: 15000,
+	db: 0,
+	pass: 'wWSVeTz6L2i18am6alTfzyrNSIanxWZHYIHJYlNm8i30JXQnWxrpNKEcR7/0k7AsdXKoc8yoOqLN+JoJZadzaydEPIFyX0uKNV/46mAylDNSwIuuUaIF0Kl7l5w6OUacPJQyMw==',
+	prefix: 'session:'
 
 	// host: 'dmaricic.com',
 	// port: 6379,

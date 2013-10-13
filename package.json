@@ -2,7 +2,7 @@
 	"name": "ConfigurationManager",
 	"private": true,
 	"version": "0.0.1",
-	"description": "a Sails application",
+	"description": "manager for confs",
 	"dependencies":
 	{
 		"sails": "0.9.4",
@@ -11,7 +11,6 @@
 		"ejs": "0.8.4",
 		"optimist": "0.3.4",
 		"sails-mongo": "*",
-		"sails-redis": "*",
 		"waterline": "*",
 		"password-hash": "*",
 		"bcrypt": "*",
@@ -25,9 +24,7 @@
 		"JSONPath": "",
 		"xregexp": "",
 		"deepmerge": "",
-		"hashish": "",
-		"redis": "",
-		"hiredis": ""
+		"hashish": ""
 
 	},
 	"scripts":
@@ -36,7 +33,7 @@
 		"debug": "node debug app.js"
 	},
 	"main": "app.js",
-	"repository": "",
-	"author": "",
+	"repository": "https://bitbucket.org/woss/confmanager",
+	"author": "Danijel Maricic",
 	"license": ""
 }

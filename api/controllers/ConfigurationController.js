@@ -10,11 +10,12 @@ var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
-
 var Conf = {
 	_json:
 	{},
 	json: '',
+	redis:
+	{},
 	/**
 	 * Replacing placeholders in given configuration object
 	 * @param  {[object]}			_json Configuration from DB
@@ -97,6 +98,41 @@ var Conf = {
 		var replacePlacehodler = '{+/' + placeHolder + '+}';
 		Conf.json = Conf.json.replace(replacePlacehodler, value);
 		// console.log('+++++++++++++++')
+	},
+	checkIsItCached: function (confId, cb)
+	{
+		confId = confId.split('|')[2];
+		console.log(confId);
+		var hash = Conf.redis.get(confId, function (err, conf)
+		{
+			if (err)
+			{
+				cb(
+				{
+					success: false,
+					data: err
+				});
+			}
+			else
+			{
+				if (_.isEmpty(conf))
+				{
+					cb(
+					{
+						success: false,
+						msg: 'No configs in redis'
+					});
+				}
+				else
+				{
+					cb(
+					{
+						success: true,
+						data: JSON.parse(conf)
+					});
+				}
+			}
+		});
 	}
 };
 
@@ -110,103 +146,102 @@ module.exports = {
 	getConf: function (req, res)
 	{
 
-		var redis = require("redis"),
-			client = redis.createClient(sails.config.session.port, sails.config.session.host);
-		client.auth(sails.config.session.pass);
-
-		if (req.param('uuid'))
+		// console.log(sails.config);
+		// console.log(sails.config.session.store.client);
+		var client = sails.config.session.store.client;
+		Conf.redis = client;
+		Conf.checkIsItCached(req.param('id'), function (conf)
 		{
-			var hash = client.hgetall(req.param('uuid'), function (err, obj)
+			console.log('Conf in redis');
+			if (conf.success && _.isObject(conf))
+				res.json(conf.data)
+			else
 			{
-				console.log('from redis');
-				return res.json(JSON.parse(obj.conf));
-			});
-		}
-		else
-		{
-			var appUUID = req.param("appUUID");
-			var envUUID = req.param("envUUID");
-			// console.log(req.header('Host')); get host from request. it could be restricted with that aswell
+				var appUUID = req.param("id").split('|')[0];
+				var envUUID = req.param("id").split('|')[1];
+				// console.log(req.header('Host')); get host from request. it could be restricted with that aswell
+				console.log('ConfNot in redis');
+				// TODO check is application active or not
+				// if not then throw error
+				// refactor the responses to serve websockets as well, just plain websocekts resp
 
-			// TODO check is application active or not
-			// if not then throw error
-			// refactor the responses to serve websockets as well, just plain websocekts resp
-
-			// let's find baseConf for this app
-			Configuration.find(
-			{
-				appUUID: appUUID,
-				baseConfig: true
-			})
-				.done(function (err, _bconf)
+				// let's find baseConf for this app
+				Configuration.find(
 				{
-					if (err)
+					appUUID: appUUID,
+					baseConfig: true
+				})
+					.done(function (err, _bconf)
 					{
-						res.json(500,
+						if (err)
 						{
-							error: "Ooops ERROR " + JSON.stringify(err)
-						});
-					}
-					else if (_bconf.length == 0)
-					{
-						res.json(500,
-						{
-							error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
-						});
-					}
-					else
-					{
-						var baseConf = _bconf[0].data;
-						var cloneBaseConf = Hash.clone(baseConf);
-
-						Configuration.find(
-						{
-							envUUID: envUUID,
-							appUUID: appUUID
-						})
-							.done(function (err, conf)
+							res.json(500,
 							{
-								if (err)
-								{
-									res.json(500,
-									{
-										error: "Ooops ERROR " + JSON.stringify(err)
-									});
-								}
-								else if (_bconf.length == 0)
-								{
-									res.json(500,
-									{
-										error: "There is no config settings!!!! Create it!!!!"
-									});
-								}
-								else
-								{
-									var currentConf = conf[0].data;
-
-									var mergedConf = merge(cloneBaseConf, currentConf);
-									Conf.replacePaths(mergedConf, function (resp)
-									{
-										// console.log(resp);
-										if (resp.success)
-										{
-											// add first user
-											// client.sadd("confs", "confs:" + conf[0].uuid);
-											// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
-											client.hset(conf[0].uuid, 'conf', JSON.stringify(resp.data));
-											res.json(resp.data);
-										}
-										else
-											res.json(500,
-											{
-												error: resp.error
-											});
-									});
-								}
+								error: "Ooops ERROR " + JSON.stringify(err)
 							});
-					}
-				});
-		}
+						}
+						else if (_bconf.length == 0)
+						{
+							res.json(500,
+							{
+								error: "There is no BaseConfig settings!!!! Create BaseConfig first then the rest"
+							});
+						}
+						else
+						{
+							var baseConf = _bconf[0].data;
+							var cloneBaseConf = Hash.clone(baseConf);
+
+							Configuration.find(
+							{
+								envUUID: envUUID,
+								appUUID: appUUID
+							})
+								.done(function (err, conf)
+								{
+									if (err)
+									{
+										res.json(500,
+										{
+											error: "Ooops ERROR " + JSON.stringify(err)
+										});
+									}
+									else if (_bconf.length == 0)
+									{
+										res.json(500,
+										{
+											error: "There is no config settings!!!! Create it!!!!"
+										});
+									}
+									else
+									{
+										var currentConf = conf[0].data;
+
+										var mergedConf = merge(cloneBaseConf, currentConf);
+										Conf.replacePaths(mergedConf, function (resp)
+										{
+											// console.log(resp);
+											if (resp.success)
+											{
+												// add first user
+												// client.sadd("confs", "confs:" + conf[0].uuid);
+												// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+												console.log('Adding conf to redis');
+												client.set(conf[0].uuid, JSON.stringify(resp.data));
+												res.json(resp.data);
+											}
+											else
+												res.json(500,
+												{
+													error: resp.error
+												});
+										});
+									}
+								});
+						}
+					});
+			}
+		});
 	},
 	deleteAll: function (req, res)
 	{

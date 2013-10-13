@@ -18,6 +18,15 @@ module.exports.adapters = {
 	// in a model definition, 'default' will be used.
 	default: 'mongo',
 
+	mongo:
+	{
+		module: 'sails-mongo',
+		host: 'dmaricic.com',
+		port: 27017,
+		user: 'confManager',
+		password: 'confManager',
+		database: 'confManager'
+	},
 	// In-memory adapter for DEVELOPMENT ONLY
 	memory:
 	{
@@ -44,13 +53,4 @@ module.exports.adapters = {
 	// 	password: 'YOUR_MYSQL_PASSWORD',
 	// 	database: 'YOUR_MYSQL_DB'
 	// },
-	mongo:
-	{
-		module: 'sails-mongo',
-		host: 'dmaricic.com',
-		port: 27017,
-		user: 'confManager',
-		password: 'confManager',
-		database: 'confManager'
-	}
 };
