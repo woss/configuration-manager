@@ -28,7 +28,6 @@ Problems that will be solved with CM (at least i see it like this) :
     * http://mongoid.org/en/mongoid/docs/extras.html#versioning **NOT**
     * https://github.com/aq1018/mongoid-history **NOT**
     * http://hbase.apache.org/ **NOT**
-* when configuration is activated store it and push it to redis
 * refactor conf
 
 ### Historical Configurations
@@ -51,6 +50,7 @@ http://support.mongohq.com/use-cases/document-versioning.html
 
 #### _v0.1_
 
+* when configuration is activated store it and push it to redis
 * added parsing of placeholders
 * sample of confs
 * refactoring of knockoutJS
