@@ -30,9 +30,30 @@ Problems that will be solved with CM (at least i see it like this) :
     * http://hbase.apache.org/ **NOT**
 * refactor conf
 
+### I have made a mistake
+
+It goes like this!!!!
+
+Application -> Multiple Envs ONLY one BASE -> Multiple Confs Per ENV ONE BASE CONF IN BASE ENV
+
+* Application
+* ENVS
+  * BASE _default_
+    * BASE config _empty_ *can be editable*
+  * ENV1 
+    * CONF1
+      * data  : ```{"some":"data"}```
+  * ENV2
+    * CONF1
+      * data  : ```{"som1e":"dat1a"}```
+    * CONF2
+      * data  : ```{"some_other":"data"}```
+
+
+
 ### Historical Configurations
 
-Diff solutions
+_Diff solutions_
 
 * https://npmjs.org/package/json-diff
 * https://nodejsmodules.org/tags/diff
