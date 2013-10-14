@@ -1,0 +1,3 @@
+[submodule "wiki"]
+	path = wiki
+	url = https://woss@bitbucket.org/woss/confmanager.git/wiki
