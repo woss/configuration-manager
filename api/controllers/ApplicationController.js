@@ -8,22 +8,6 @@
 module.exports = {
 	create: function (req, res)
 	{
-		// console.log(req.socket);
-		// return res.json(
-		// {
-		// 	"uri": "/chat/create",
-		// 	"data":
-		// 	{
-		// 		"id": 283,
-		// 		"message": "who is going out tonight?",
-		// 		"user":
-		// 		{
-		// 			"id": 3,
-		// 			"username": "Roscoe"
-		// 		}
-		// 	}
-		// });
-
 		if (_.isUndefined(req.param("name")))
 		{
 			return res.json(
@@ -53,9 +37,10 @@ module.exports = {
 				{
 					Environment.create(
 					{
-						name: 'General',
+						name: 'BASE',
 						appUUID: app.uuid,
-						baseEnv: true
+						baseEnv: true,
+						active: true,
 					})
 						.done(function (error, env)
 						{
@@ -64,6 +49,7 @@ module.exports = {
 								appUUID: app.uuid,
 								envUUID: env.uuid,
 								baseConfig: true,
+								active: true,
 								data:
 								{}
 							})
@@ -90,47 +76,50 @@ module.exports = {
 			success: true
 		};
 		// For example, to delete a user named Johnny,
-		Application.destroy().done(function (err)
-		{
-			if (err)
-				resJson = {
-					success: false,
-					error: err
-				};
-			else
-				resJson = {
-					success: true,
-					message: "Applications deleted"
-				};
-		});
+		Application.destroy()
+			.done(function (err)
+			{
+				if (err)
+					resJson = {
+						success: false,
+						error: err
+					};
+				else
+					resJson = {
+						success: true,
+						message: "Applications deleted"
+					};
+			});
 		// For example, to delete a user named Johnny,
-		Environment.destroy().done(function (err)
-		{
-			if (err)
-				resJson = {
-					success: false,
-					error: err
-				};
-			else
-				resJson = {
-					success: true,
-					message: "Environments deleted"
-				};
-		});
+		Environment.destroy()
+			.done(function (err)
+			{
+				if (err)
+					resJson = {
+						success: false,
+						error: err
+					};
+				else
+					resJson = {
+						success: true,
+						message: "Environments deleted"
+					};
+			});
 		// For example, to delete a user named Johnny,
-		Configuration.destroy().done(function (err)
-		{
-			if (err)
-				resJson = {
-					success: false,
-					error: err
-				};
-			else
-				resJson = {
-					success: true,
-					message: "Configuration deleted"
-				};
-		});
+		Configuration.destroy()
+			.done(function (err)
+			{
+				if (err)
+					resJson = {
+						success: false,
+						error: err
+					};
+				else
+					resJson = {
+						success: true,
+						message: "Configuration deleted"
+					};
+			});
 
 		return res.json(resJson);
 	}

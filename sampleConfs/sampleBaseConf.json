@@ -1,7 +1,10 @@
 {
 	"root_path": "/var/www/myApplication",
-	"base_path": "{+root_path+}/www/public",
-	"test_db_path": "{+db/default/username+}__something",
+	"base_path": "{+/root_path+}/www/public",
+	"test_db_path": "{+/db/default/host+}__something",
+	"test_db_path12": "{+/db/default/host+}__something",
+	"test_db_path112": "{+/db/default/host+}__something",
+	"test_db_path112": "{+/base_path+}__something",
 	"db":
 	{
 		"default":
@@ -13,7 +16,7 @@
 		},
 		"main":
 		{
-			"username": "danijel",
+			"username": "{+/test_db_path112+}/{+/db/main/username+}",
 			"password": "123456",
 			"db_name": "confManager",
 			"host": "http://localhost:3307"
