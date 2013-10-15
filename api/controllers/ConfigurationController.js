@@ -101,7 +101,6 @@ var Conf = {
 	},
 	checkIsItCached: function (confId, cb)
 	{
-		confId = confId.split('|')[2];
 		console.log(confId);
 		var hash = Conf.redis.get(confId, function (err, conf)
 		{
@@ -151,16 +150,49 @@ module.exports = {
 		var id = req.param('id');
 		Conf.checkIsItCached(id, function (conf)
 		{
-			console.log('Conf in redis');
+
 			if (conf.success && _.isObject(conf))
-				res.json(conf.data)
+			{
+				console.log('Conf in redis');
+				return res.json(conf.data)
+			}
 			else
 			{
-				Configuration.find(
+				Configuration.findOne(
 				{
 					uuid: id
-				}).done(function (err, conf) {
+				}).done(function (err, conf)
+				{
 
+					Configuration.findOne(
+					{
+						envUUID: conf.envUUID,
+						baseConfig: true
+					}).done(function (err, baseConf)
+					{
+						console.log(conf)
+						console.log(baseConf)
+						var mergedConf = merge(baseConf.data, conf.data);
+						Conf.replacePaths(mergedConf, function (resp)
+						{
+							// console.log(resp);
+							if (resp.success)
+							{
+								// add first user
+								// client.sadd("confs", "confs:" + conf[0].uuid);
+								// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+								console.log('Adding conf to redis');
+								redis.set(conf[0].uuid, JSON.stringify(resp.data));
+								return res.json(resp.data);
+							}
+							else
+								return res.json(500,
+								{
+									error: resp.error
+								});
+						});
+
+					});
 				});
 			}
 		});
