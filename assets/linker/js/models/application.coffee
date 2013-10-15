@@ -88,53 +88,20 @@ $ ->
           env.confs mappedConfs
     self.openConfs = (env) ->
       self.confs env.confs()
-       
+    self.showDiffConf = (e)->
+      container = document.getElementById("jsoneditor")
+      console.log container
+      json = editor.get()
+    self.openConf = (conf) ->
+      container = document.getElementById("jsoneditor")
+      editor = new jsoneditor.JSONEditor(container)
+      editor.set conf.data
+      # get json
+      
+      $('#showConf').modal('show');
+      console.log conf
     return
   viewModel = new ViewModel()
-  
-
-  viewModel.modal =
-    header: ko.observable("Delete ")
-    body: ko.observable("<p>You are about to delete one track url, this procedure is irreversible.</p>
-        <p>Do you want to proceed?</p>")
-    closeLabel: "No"
-    primaryLabel: "Yes"
-    show: ko.observable(false) # Set to true to show initially
-    onClose: ->
-      viewModel.onModalClose()
-
-    onAction: ->
-      viewModel.onModalAction()
-
-  viewModel.showModal = ->
-    viewModel.modal.show true
-    console.log 'sdasdas'
-
-  viewModel.onModalClose = () ->
-      alert("CLOSE!");
-  
-  viewModel.onModalAction = () ->
-      alert("ACTION!");
-  
-  ko.bindingHandlers.bootstrapModal = 
-    init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) ->
-      props = valueAccessor()
-      vm = bindingContext.createChildContext(viewModel)
-      ko.utils.extend vm, props
-      vm.close = ->
-        vm.show false
-        vm.onClose()
-
-      vm.action = ->
-        vm.onAction()
-
-      ko.utils.toggleDomNodeCssClass element, "modal hide fade", true
-      ko.renderTemplate "myModal", vm, null, element
-      showHide = ko.computed(->
-        $(element).modal (if vm.show() then "show" else "hide")
-      )
-      controlsDescendantBindings: true
-
   ko.applyBindings viewModel
 
   # getting data

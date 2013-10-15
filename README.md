@@ -29,6 +29,21 @@ Problems that will be solved with CM (at least i see it like this) :
     * https://github.com/aq1018/mongoid-history **NOT**
     * http://hbase.apache.org/ **NOT**
 * refactor conf
+* UI 
+  * Continue with Design
+  * Use knockoutJS for building MVVM pattern
+  * websockets only in UI
+  * create Logo
+  * optimize the JS
+  * info on API
+    * Each piece of info should give full API 
+    * info panel for this
+  * display API usage, calls for configs, not being tracked for UI calls
+  * JSON validation (LINT and format)
+* API calls record
+  * Every time when call is made to get conf , api should be recorded
+  * Each app can have small report for API usage
+
 
 ### Historical Configurations
 
