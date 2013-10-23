@@ -17,14 +17,16 @@ module.exports = {
 
 			});
 		}
+		var name = req.param('name');
+
 		Application.create(
 		{
-			name: req.param('name'),
-			userID: req.user.id,
-			active: req.param('active')
+			name: name,
+			userID: req.user.id
 		})
 			.done(function (error, app)
 			{
+				console.log(error);
 				if (error)
 				{
 					return res.json(500,
@@ -33,41 +35,9 @@ module.exports = {
 						message: error
 					});
 				}
-				else
-				{
-					Environment.create(
-					{
-						name: 'BASE',
-						appUUID: app.uuid,
-						baseEnv: true,
-						active: true,
-					})
-						.done(function (error, env)
-						{
-							Configuration.create(
-							{
-								appUUID: app.uuid,
-								envUUID: env.uuid,
-								baseConfig: true,
-								active: true,
-								data:
-								{}
-							})
-								.done(function ()
-								{
-									return res.json(
-									{
-										success: true,
-										id: app.id,
-										uuid: app.uuid,
-										name: app.name,
-										active: app.active
-									});
-								});
-						});
+				return res.json(app);
+			});
 
-				}
-			})
 	},
 
 	deleteAll: function (req, res)

@@ -6,7 +6,7 @@ module.exports = {
 	{
 		customMiddleware: function (app)
 		{
-			// console.log('Express midleware for passport');
+			console.log(passport);
 			app.use(passport.initialize());
 			app.use(passport.session());
 		}
