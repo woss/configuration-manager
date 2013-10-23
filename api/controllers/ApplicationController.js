@@ -75,7 +75,6 @@ module.exports = {
 		resJson = {
 			success: true
 		};
-		// For example, to delete a user named Johnny,
 		Application.destroy()
 			.done(function (err)
 			{
@@ -90,7 +89,6 @@ module.exports = {
 						message: "Applications deleted"
 					};
 			});
-		// For example, to delete a user named Johnny,
 		Environment.destroy()
 			.done(function (err)
 			{
@@ -105,7 +103,6 @@ module.exports = {
 						message: "Environments deleted"
 					};
 			});
-		// For example, to delete a user named Johnny,
 		Configuration.destroy()
 			.done(function (err)
 			{
