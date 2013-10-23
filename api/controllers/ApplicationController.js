@@ -5,6 +5,12 @@
  * @description :: Contains logic for handling requests.
  */
 
+function createScaffoldEnvs(appId, callback)
+{
+
+	callback && callback(createdIds);
+};
+
 module.exports = {
 	create: function (req, res)
 	{
@@ -22,11 +28,12 @@ module.exports = {
 		Application.create(
 		{
 			name: name,
-			userID: req.user.id
+			userID: req.user.id,
+			baseConfig:
+			{}
 		})
 			.done(function (error, app)
 			{
-				console.log(error);
 				if (error)
 				{
 					return res.json(500,
@@ -34,6 +41,48 @@ module.exports = {
 						error: "DB Error",
 						message: error
 					});
+				}
+				var scaffoldEnvs = ['Dev', 'Prod', 'RC', 'CI'];
+				var createdIds = {};
+				for (var i = 0; i < scaffoldEnvs.length; i++)
+				{
+					var scaffoldEnv = scaffoldEnvs[i];
+					Environment.create(
+					{
+						name: scaffoldEnv,
+						appId: app.id,
+						active: true,
+					})
+						.done(function (error, env)
+						{
+							var envId = env.id;
+							createdIds[envId] = {
+								conf: []
+							};
+							Configuration.create(
+							{
+								appId: app.id,
+								envId: envId,
+								data:
+								{}
+							})
+								.done(function (error, conf)
+								{
+									console.log('im fired async')
+									createdIds[envId].conf.push(conf.id);
+									Application.update(
+									{
+										id: app.id
+									},
+									{
+										envs: createdIds
+									}, function (err, _app)
+									{
+										console.log('im fired async when app is done')
+									});
+								});
+
+						});
 				}
 				return res.json(app);
 			});
