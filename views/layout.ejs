@@ -35,14 +35,13 @@
 
 <body>
   <!-- Setting session flash msg http://www.youtube.com/watch?v=4Gbc9ZA2-YY -->
-  <!-- Include the view file for the current controller/route -->
-
-  <div id="wrapper">
+  <!-- Include the view file for the current controller/route -->  
     <% if (req.user) { %>
       <script>ch.user.id="<%=req.user.id%>";</script>
     <% } %>
+  <div id="wrapper">
     <%- body %>
   </div>
-<script src="/linker/js/morris/chart-data-morris.js"></script>
+
 </body>
 </html>
