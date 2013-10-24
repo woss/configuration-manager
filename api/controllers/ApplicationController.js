@@ -14,7 +14,21 @@ function createScaffoldEnvs(appId, callback)
 module.exports = {
 	get: function (req, res)
 	{
-		return res.view();
+		Application.findOne(
+		{
+			id: req.param('id')
+		}).done(function (err, app)
+		{
+			console.log(_.size(app.envs))
+			console.log(app)
+			res.view('application/get',
+			{
+				layout: null,
+				app: app,
+				envs: _.size(app.envs)
+			});
+		});
+
 	},
 	create: function (req, res)
 	{
@@ -88,7 +102,7 @@ module.exports = {
 
 						});
 				}
-				return res.json(app);
+				res.json(app);
 			});
 
 	},

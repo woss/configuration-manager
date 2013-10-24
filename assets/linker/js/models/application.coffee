@@ -62,16 +62,10 @@ $ ->
     self.openApp = (app) -> 
       self.appInfo true
       self.appName(app.name)
-      data = {
-        "where":{
-          "appId":app.id
-        }
-      }
-      socket.post "/environment/find", data, (envs) ->
-        mappedEnvs = _.map envs, (env) ->
-          new Env(env)
-        self.envs mappedEnvs
-        self.getConfs(mappedEnvs)
+      $.get app.url(), (appData) ->
+        $('#dashboard').remove();
+        $('#application').remove();
+        $('#page-wrapper').append(appData);
 
     self.getConfs = (envs) ->
       _.map envs, (env) ->
@@ -111,6 +105,7 @@ $ ->
     viewModel.apps mappedApps
   #listening socket for new apps
   socket.on "message", (data) ->
+    console.log data
     if data.model is "application"
       viewModel.apps.push(new App(data.data))
     if data.model is "configuration"
