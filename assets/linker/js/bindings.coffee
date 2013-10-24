@@ -11,10 +11,14 @@ $ ->
       data: {"username":'username',"password":'password'}
       beforeSend: (xhr) ->
         xhr.setRequestHeader "Authorization", authHash
-      success: (xhr)->
-        console.log xhr
+      success: (xhr)->        
         window.location.href = "dash"
       error: (xhr, type) ->
+        console.log xhr
+        $.pnotify
+          title: "Authorization ERROR"
+          text: xhr.responseJSON.message,
+          type: 'error'
         messageJSON = JSON.parse(xhr.responseText)
   # Bindings for Signup Button
   $("#signUpButton").on "click", (e) ->

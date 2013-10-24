@@ -11,6 +11,8 @@ $ ->
       @id = data.id
       @isActive = ko.observable(data.active)
       @isNotActive = ko.observable(data.active)
+      @url = ko.observable("/application/get/"+@id)
+      @details = ko.observable(data.name)
 
   class Env 
     constructor: (data) ->

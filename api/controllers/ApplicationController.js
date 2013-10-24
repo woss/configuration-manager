@@ -12,6 +12,10 @@ function createScaffoldEnvs(appId, callback)
 };
 
 module.exports = {
+	get: function (req, res)
+	{
+		return res.view();
+	},
 	create: function (req, res)
 	{
 		if (_.isUndefined(req.param("name")))
