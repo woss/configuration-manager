@@ -136,6 +136,63 @@ var Conf = {
 };
 
 module.exports = {
+	get: function (req, res)
+	{
+		var redis = sails.config.session.store.client;
+		var accessId = req.param('accessId');
+		redis.get('published:' + accessId, function (err, conf)
+		{
+			console.log(err, conf);
+		});
+
+	},
+	preview: function (req, res)
+	{
+		var redis = sails.config.session.store.client;
+		Conf.redis = redis;
+		var id = req.param('id');
+		Configuration.findOne(
+		{
+			id: id
+		}).done(function (err, conf)
+		{
+			Application.findOne(
+			{
+				id: conf.appId,
+			}).done(function (err, app)
+			{
+				var mergedConf = merge(app.baseConfig, conf.data);
+				Conf.replacePaths(mergedConf, function (resp)
+				{
+					// console.log(resp);
+					if (resp.success)
+					{
+						// add first user
+						// client.sadd("confs", "confs:" + conf[0].uuid);
+						var uuid = require('node-uuid');
+						var hash = uuid.v4();
+
+						redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data), "accessId", hash);
+						redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
+						// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+						console.log('Adding conf to redis');
+						// redis.set(conf.id, JSON.stringify(resp.data));
+						return res.json(
+						{
+							data: resp.data,
+							accessId: hash
+						});
+					}
+					else
+						return res.json(500,
+						{
+							error: resp.error
+						});
+				});
+
+			});
+		});
+	},
 	/**
 	 * Get configuration main method
 	 * @param  {[type]} req
@@ -145,8 +202,8 @@ module.exports = {
 	createConf: function (req, res)
 	{
 		// Redis session client connection
-		var client = sails.config.session.store.client;
-		Conf.redis = client;
+		var redis = sails.config.session.store.client;
+		Conf.redis = redis;
 		var id = req.param('id');
 		Conf.checkIsItCached(id, function (conf)
 		{

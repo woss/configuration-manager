@@ -26,7 +26,7 @@ module.exports.session = {
 	// Read more about options at: https://github.com/visionmedia/connect-redis
 
 	host: 'dmaricic.com',
-	port: 6379,
+	port: 6380,
 	ttl: 15000,
 	db: 0,
 	// pass: 'wWSVeTz6L2i18am6alTfzyrNSIanxWZHYIHJYlNm8i30JXQnWxrpNKEcR7/0k7AsdXKoc8yoOqLN+JoJZadzaydEPIFyX0uKNV/46mAylDNSwIuuUaIF0Kl7l5w6OUacPJQyMw==',
