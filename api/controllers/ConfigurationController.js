@@ -34,11 +34,19 @@ var Conf = {
 		{
 			valueNames: [null, null, 'match', null]
 		});
-		matches.forEach(function (item)
+
+		for (var i = matches.length - 1; i >= 0; i--)
 		{
+			var item = matches[i];
 			replacePattern = item.name
 			Conf.recursiveFunction(replacePattern)
-		});
+		};
+
+		// matches.forEach(function (item)
+		// {
+		// 	replacePattern = item.name
+		// 	Conf.recursiveFunction(replacePattern)
+		// });
 
 		return cb(
 		{
@@ -53,9 +61,9 @@ var Conf = {
 	 * @param  {[string]} searchPath  INitially empty, if dependency is found then we pass this
 	 * @return {[function]}            [description]
 	 */
-	recursiveFunction: function (item, searchPath)
+	recursiveFunction: function (item, searchPathDep)
 	{
-		searchPath = searchPath || "";
+		searchPathDep = searchPathDep || "";
 		replacePattern = item
 
 		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
@@ -64,23 +72,27 @@ var Conf = {
 
 		valuePath = jsonPath(Conf._json, searchPath)[0];
 
-		if (!_.isEmpty(searchPath) && searchPath != replacePattern)
+		if (!_.isEmpty(searchPathDep))
 		{
-			// console.log('replacePattern ' + replacePattern)
-			// console.log('master node for replacement is ' + searchPath);
-			searchPath = "$.." + searchPath.replace(/\//g, '.');
+			console.log('replacePattern ' + replacePattern)
+			console.log('master node for replacement is ' + searchPath);
+			searchPath = "$.." + searchPathDep.replace(/\//g, '.');
 			Conf.replaceJson(replacePattern, valuePath);
 		}
 
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0]
-
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
+		{
+			valueNames: [null, null, 'match', null]
+		})
+		console.log(matchDependancy)
 		if (!_.isEmpty(matchDependancy))
 		{
-			// console.log('-----------------')
-			// console.log('In search path ' + searchPath)
-			// console.log('Value is ' + valuePath);
-			// console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
-			// console.log('-----------------')
+			console.log('-----------------')
+			console.log('In search path ' + searchPath)
+			console.log('Value is ' + valuePath);
+			console.log('ReplacePattern  is ' + replacePattern);
+			console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
+			console.log('-----------------')
 			Conf.recursiveFunction(matchDependancy, replacePattern)
 		}
 		// here is replacement
