@@ -26,7 +26,6 @@ module.exports = {
 				{
 					message: "There is an error with authorisation."
 				}, 401);
-				// res.json(err);
 			}
 			req.logIn(user, function (err)
 			{
