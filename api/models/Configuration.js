@@ -30,6 +30,20 @@ module.exports = {
 		{
 			type: "boolean",
 			defaultsTo: false
+		},
+		history:
+		{
+			type: 'json',
+			defaultsTo:
+			{}
+		},
+		currentRevision:
+		{
+			type: "integer"
+		},
+		publishedRevision:
+		{
+			type: "integer"
 		}
 
 	}

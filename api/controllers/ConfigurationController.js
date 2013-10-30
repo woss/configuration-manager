@@ -148,6 +148,30 @@ var Conf = {
 };
 
 module.exports = {
+	update: function (req, res)
+	{
+		var reqData = req.param('data'),
+			reqId = req.param('id');
+
+		Configuration.findOne(
+		{
+			id: reqId
+		}).done(function (err, conf)
+		{
+			var currentRevision = conf.currentRevision + 1;
+			conf.data = reqData;
+			console.log(conf.history);
+			console.log(currentRevision);
+			conf.history[currentRevision] = reqData;
+			console.log(conf.history);
+			conf.currentRevision = currentRevision;
+			conf.save(function (err, res)
+			{
+				console.log(err, res);
+			});
+		});
+		res.json('Itsok');
+	},
 	get: function (req, res)
 	{
 		var redis = sails.config.session.store.client;
