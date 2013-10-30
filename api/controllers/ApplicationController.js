@@ -5,7 +5,31 @@
  * @description :: Contains logic for handling requests.
  */
 
+function createScaffoldEnvs(appId, callback)
+{
+
+	callback && callback(createdIds);
+};
+
 module.exports = {
+	get: function (req, res)
+	{
+		Application.findOne(
+		{
+			id: req.param('id')
+		}).done(function (err, app)
+		{
+			console.log(_.size(app.envs))
+			console.log(app)
+			res.view('application/get',
+			{
+				layout: null,
+				app: app,
+				envs: _.size(app.envs)
+			});
+		});
+
+	},
 	create: function (req, res)
 	{
 		if (_.isUndefined(req.param("name")))
@@ -17,11 +41,14 @@ module.exports = {
 
 			});
 		}
+		var name = req.param('name');
+
 		Application.create(
 		{
-			name: req.param('name'),
+			name: name,
 			userID: req.user.id,
-			active: req.param('active')
+			baseConfig:
+			{}
 		})
 			.done(function (error, app)
 			{
@@ -33,41 +60,51 @@ module.exports = {
 						message: error
 					});
 				}
-				else
+				var scaffoldEnvs = ['Dev', 'Prod', 'RC', 'CI'];
+				var createdIds = {};
+				for (var i = 0; i < scaffoldEnvs.length; i++)
 				{
+					var scaffoldEnv = scaffoldEnvs[i];
 					Environment.create(
 					{
-						name: 'BASE',
-						appUUID: app.uuid,
-						baseEnv: true,
+						name: scaffoldEnv,
+						appId: app.id,
 						active: true,
 					})
 						.done(function (error, env)
 						{
+							var envId = env.id;
+							createdIds[envId] = {
+								conf: []
+							};
 							Configuration.create(
 							{
-								appUUID: app.uuid,
-								envUUID: env.uuid,
-								baseConfig: true,
-								active: true,
+								appId: app.id,
+								envId: envId,
 								data:
 								{}
 							})
-								.done(function ()
+								.done(function (error, conf)
 								{
-									return res.json(
+									console.log('im fired async')
+									createdIds[envId].conf.push(conf.id);
+									Application.update(
 									{
-										success: true,
-										id: app.id,
-										uuid: app.uuid,
-										name: app.name,
-										active: app.active
+										id: app.id
+									},
+									{
+										envs: createdIds
+									}, function (err, _app)
+									{
+										console.log('im fired async when app is done')
 									});
 								});
-						});
 
+						});
 				}
-			})
+				res.json(app);
+			});
+
 	},
 
 	deleteAll: function (req, res)

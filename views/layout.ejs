@@ -3,38 +3,45 @@
 <head>
   <title><%- title %></title>
   <!-- Viewport mobile tag for sensible mobile support -->
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1" name=
-  "viewport">
-  <!--STYLES-->
-  <link rel="stylesheet" href="/linker/styles/auth.css">
-  <link rel="stylesheet" href="/linker/styles/bootstrap.min.css">
-  <link rel="stylesheet" href="/linker/styles/jsoneditor-min.css">
-  <link rel="stylesheet" href="/linker/styles/theme.css">
-  <!--STYLES END-->
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/linker/font-awesome/css/font-awesome-ie7.min.css">
+<link rel="stylesheet" href="/linker/font-awesome/css/font-awesome.min.css">
+<link rel="stylesheet" href="/linker/styles/auth.css">
+<link rel="stylesheet" href="/linker/styles/bootstrap.css">
+<link rel="stylesheet" href="/linker/styles/bootstrap.theme.min.css">
+<link rel="stylesheet" href="/linker/styles/jquery.pnotify.default.css">
+<link rel="stylesheet" href="/linker/styles/jquery.pnotify.default.icons.css">
+<link rel="stylesheet" href="/linker/styles/jsoneditor-min.css">
+<link rel="stylesheet" href="/linker/styles/sb-admin.css">
+<link rel="stylesheet" href="/linker/styles/morris-0.4.3.min.css">
 <script src="/linker/js/underscore-min.js"></script>
-<script src="/linker/js/jquery-2.0.3.min.js"></script>
+<script src="/linker/js/jquery-1.9.1.min.js"></script>
 <script src="/linker/js/knockout-2.3.0.js"></script>
 <script src="/linker/js/socket.io.js"></script>
 <script src="/linker/js/sails.io.js"></script>
 <script src="/linker/js/app.js"></script>
 <script src="/linker/js/core.js"></script>
 <script src="/linker/js/bindings.js"></script>
-<script src="/linker/js/bootstrap/bootstrap.js"></script>
+<script src="/linker/js/bootstrap.min.js"></script>
+<script src="/linker/js/jquery.pnotify.min.js"></script>
+<script src="/linker/js/tablesorter/jquery.tablesorter.js"></script>
+<script src="/linker/js/tablesorter/tables.js"></script>
 <script src="/linker/js/jsoneditor-min.js"></script>
 <script src="/linker/js/endBindings.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+<script src="http://cdn.oesmith.co.uk/morris-0.4.3.min.js"></script>
+
 </head>
 
 <body>
   <!-- Setting session flash msg http://www.youtube.com/watch?v=4Gbc9ZA2-YY -->
-  <!-- Include the view file for the current controller/route -->
-
-  <div class="container">
+  <!-- Include the view file for the current controller/route -->  
     <% if (req.user) { %>
       <script>ch.user.id="<%=req.user.id%>";</script>
-      <%- partial('dash/partials/dash/navBar') %>
     <% } %>
+  <div id="wrapper">
     <%- body %>
   </div>
+
 </body>
 </html>

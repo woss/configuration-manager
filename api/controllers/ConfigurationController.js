@@ -34,11 +34,19 @@ var Conf = {
 		{
 			valueNames: [null, null, 'match', null]
 		});
-		matches.forEach(function (item)
+
+		for (var i = matches.length - 1; i >= 0; i--)
 		{
+			var item = matches[i];
 			replacePattern = item.name
 			Conf.recursiveFunction(replacePattern)
-		});
+		};
+
+		// matches.forEach(function (item)
+		// {
+		// 	replacePattern = item.name
+		// 	Conf.recursiveFunction(replacePattern)
+		// });
 
 		return cb(
 		{
@@ -53,9 +61,9 @@ var Conf = {
 	 * @param  {[string]} searchPath  INitially empty, if dependency is found then we pass this
 	 * @return {[function]}            [description]
 	 */
-	recursiveFunction: function (item, searchPath)
+	recursiveFunction: function (item, searchPathDep)
 	{
-		searchPath = searchPath || "";
+		searchPathDep = searchPathDep || "";
 		replacePattern = item
 
 		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
@@ -64,23 +72,27 @@ var Conf = {
 
 		valuePath = jsonPath(Conf._json, searchPath)[0];
 
-		if (!_.isEmpty(searchPath) && searchPath != replacePattern)
+		if (!_.isEmpty(searchPathDep))
 		{
-			// console.log('replacePattern ' + replacePattern)
-			// console.log('master node for replacement is ' + searchPath);
-			searchPath = "$.." + searchPath.replace(/\//g, '.');
+			console.log('replacePattern ' + replacePattern)
+			console.log('master node for replacement is ' + searchPath);
+			searchPath = "$.." + searchPathDep.replace(/\//g, '.');
 			Conf.replaceJson(replacePattern, valuePath);
 		}
 
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0]
-
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
+		{
+			valueNames: [null, null, 'match', null]
+		})
+		console.log(matchDependancy)
 		if (!_.isEmpty(matchDependancy))
 		{
-			// console.log('-----------------')
-			// console.log('In search path ' + searchPath)
-			// console.log('Value is ' + valuePath);
-			// console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
-			// console.log('-----------------')
+			console.log('-----------------')
+			console.log('In search path ' + searchPath)
+			console.log('Value is ' + valuePath);
+			console.log('ReplacePattern  is ' + replacePattern);
+			console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
+			console.log('-----------------')
 			Conf.recursiveFunction(matchDependancy, replacePattern)
 		}
 		// here is replacement
@@ -101,7 +113,6 @@ var Conf = {
 	},
 	checkIsItCached: function (confId, cb)
 	{
-		confId = confId.split('|')[2];
 		console.log(confId);
 		var hash = Conf.redis.get(confId, function (err, conf)
 		{
@@ -137,6 +148,128 @@ var Conf = {
 };
 
 module.exports = {
+	get: function (req, res)
+	{
+		var redis = sails.config.session.store.client;
+		var confId = req.param('id');
+		redis.get(confId, function (err, conf)
+		{
+			if (err)
+				res.json(err, 400)
+			else
+			{
+				if (conf)
+					res.json(JSON.parse(conf));
+				else
+					res.json(
+					{
+						error: true,
+						message: "Configurationn not found in REDIS, If you didn't run PUBLISH you should do it now"
+					}, 400)
+			}
+		});
+
+	},
+	publish: function (req, res)
+	{
+		var redis = sails.config.session.store.client;
+		Conf.redis = redis;
+		var id = req.param('id');
+		Configuration.findOne(
+		{
+			id: id
+		}).done(function (err, conf)
+		{
+			Application.findOne(
+			{
+				id: conf.appId,
+			}).done(function (err, app)
+			{
+				var mergedConf = merge(app.baseConfig, conf.data);
+				Conf.replacePaths(mergedConf, function (resp)
+				{
+					// console.log(resp);
+					if (resp.success)
+					{
+						// add first user
+						// client.sadd("confs", "confs:" + conf[0].uuid);
+						var uuid = require('node-uuid');
+						var hash = uuid.v4();
+
+						// redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data));
+						// redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
+						// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+						// console.log('Adding conf to redis');
+						redis.set(conf.id, JSON.stringify(resp.data));
+						Configuration.update(
+						{
+							id: conf.id
+						},
+						{
+							active: true
+						}).done(function (err, resp) {});
+						return res.json(
+						{
+							result: resp.data
+						});
+					}
+					else
+						return res.json(500,
+						{
+							error: resp.error
+						});
+				});
+
+			});
+		});
+	},
+	preview: function (req, res)
+	{
+		var redis = sails.config.session.store.client;
+		Conf.redis = redis;
+		var id = req.param('id');
+		Configuration.findOne(
+		{
+			id: id
+		}).done(function (err, conf)
+		{
+			Application.findOne(
+			{
+				id: conf.appId,
+			}).done(function (err, app)
+			{
+				var mergedConf = merge(app.baseConfig, conf.data);
+				Conf.replacePaths(mergedConf, function (resp)
+				{
+					// console.log(resp);
+					if (resp.success)
+					{
+						// add first user
+						// client.sadd("confs", "confs:" + conf[0].uuid);
+						// var uuid = require('node-uuid');
+						// var hash = uuid.v4();
+
+						// redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data));
+						// redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
+						// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+						// console.log('Adding conf to redis');
+						// redis.set(conf.id, JSON.stringify(resp.data));
+						return res.json(
+						{
+							data: resp.data,
+							accessId: hash
+						});
+					}
+					else
+						return res.json(500,
+						{
+							error: resp.error
+						});
+				});
+
+			});
+		});
+	},
 	/**
 	 * Get configuration main method
 	 * @param  {[type]} req
@@ -146,21 +279,54 @@ module.exports = {
 	createConf: function (req, res)
 	{
 		// Redis session client connection
-		var client = sails.config.session.store.client;
-		Conf.redis = client;
+		var redis = sails.config.session.store.client;
+		Conf.redis = redis;
 		var id = req.param('id');
 		Conf.checkIsItCached(id, function (conf)
 		{
-			console.log('Conf in redis');
+
 			if (conf.success && _.isObject(conf))
-				res.json(conf.data)
+			{
+				console.log('Conf in redis');
+				return res.json(conf.data)
+			}
 			else
 			{
-				Configuration.find(
+				Configuration.findOne(
 				{
 					uuid: id
-				}).done(function (err, conf) {
+				}).done(function (err, conf)
+				{
 
+					Configuration.findOne(
+					{
+						envUUID: conf.envUUID,
+						baseConfig: true
+					}).done(function (err, baseConf)
+					{
+						console.log(conf)
+						console.log(baseConf)
+						var mergedConf = merge(baseConf.data, conf.data);
+						Conf.replacePaths(mergedConf, function (resp)
+						{
+							// console.log(resp);
+							if (resp.success)
+							{
+								// add first user
+								// client.sadd("confs", "confs:" + conf[0].uuid);
+								// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
+								console.log('Adding conf to redis');
+								redis.set(conf[0].uuid, JSON.stringify(resp.data));
+								return res.json(resp.data);
+							}
+							else
+								return res.json(500,
+								{
+									error: resp.error
+								});
+						});
+
+					});
 				});
 			}
 		});

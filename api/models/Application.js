@@ -11,10 +11,6 @@ module.exports = {
 	attributes:
 	{
 		id: "string",
-		uuid:
-		{
-			type: "uuidv4"
-		},
 		name:
 		{
 			type: "string",
@@ -25,19 +21,16 @@ module.exports = {
 			type: "string",
 			required: true
 		},
+		baseConfig:
+		{
+			type: "json",
+			required: true
+		},
 		active:
 		{
 			type: "boolean",
 			defaultsTo: false
 		}
-	},
-	// Lifecycle Callbacks
-	beforeCreate: function (values, next)
-	{
-		var uuid = require('node-uuid');
-		var hash = uuid.v4();
-		values.uuid = hash;
-		next();
 	}
 
 };

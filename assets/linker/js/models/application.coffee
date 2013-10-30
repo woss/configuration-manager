@@ -9,16 +9,16 @@ $ ->
     constructor: (data) ->
       @name = ko.observable(data.name)
       @id = data.id
-      @uuid = data.uuid
       @isActive = ko.observable(data.active)
       @isNotActive = ko.observable(data.active)
+      @url = ko.observable("/application/get/"+@id)
+      @details = ko.observable(data.name)
 
   class Env 
     constructor: (data) ->
       @name = ko.observable(data.name)
-      @appUUID = data.appUUID
+      @appId = data.appId
       @id = data.id
-      @uuid = data.uuid
       @isActive = ko.observable(data.active)
       @isNotActive = ko.observable(data.active)
       @confs = ko.observableArray([])
@@ -26,10 +26,9 @@ $ ->
   class Conf
     constructor: (data) ->
       @id = data.id
-      @uuid = data.uuid
       @baseConfig = data.baseConfig
       @data = data.data
-      @envUUID = data.envUUID
+      @envId = data.envId
 
 
   ViewModel = ->
@@ -63,26 +62,21 @@ $ ->
     self.openApp = (app) -> 
       self.appInfo true
       self.appName(app.name)
-      data = {
-        "where":{
-          "appUUID":app.uuid
-        }
-      }
-      socket.post "/environment/find", data, (envs) ->
-        mappedEnvs = _.map envs, (env) ->
-          new Env(env)
-        self.envs mappedEnvs
-        self.getConfs(mappedEnvs)
+      $.get app.url(), (appData) ->
+        $('#dashboard').remove();
+        $('#application').remove();
+        $('#page-wrapper').append(appData);
 
     self.getConfs = (envs) ->
       _.map envs, (env) ->
         data = {
         "where":{
-          "appUUID":env.appUUID,
-          "envUUID":env.uuid
+          "appId":env.appId,
+          "envId":env.id
           }
         }
         socket.post "/configuration/find", data, (confs) ->
+          console.log confs
           mappedConfs = _.map confs, (conf) ->
             new Conf(conf)
           env.confs mappedConfs
@@ -111,6 +105,7 @@ $ ->
     viewModel.apps mappedApps
   #listening socket for new apps
   socket.on "message", (data) ->
+    console.log data
     if data.model is "application"
       viewModel.apps.push(new App(data.data))
     if data.model is "configuration"
