@@ -246,8 +246,8 @@ module.exports = {
 					{
 						// add first user
 						// client.sadd("confs", "confs:" + conf[0].uuid);
-						var uuid = require('node-uuid');
-						var hash = uuid.v4();
+						// var uuid = require('node-uuid');
+						// var hash = uuid.v4();
 
 						// redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data));
 						// redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
