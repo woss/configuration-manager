@@ -47,9 +47,7 @@ module.exports = {
 		Application.create(
 		{
 			name: name,
-			userID: req.user.id,
-			baseConfig:
-			{}
+			userID: req.user.id
 		})
 			.done(function (error, app)
 			{
@@ -61,6 +59,20 @@ module.exports = {
 						message: error
 					});
 				}
+
+				// generating the baseConf and saving to App
+				BaseConfig.create(
+				{
+					appId: app.id,
+					currentRevision: 0,
+					publishedRevision: 0,
+					data:
+					{}
+				}).done(function (err, bConf)
+				{
+					app.baseConfig = bConf.id
+					app.save();
+				});
 				var scaffoldEnvs = ['Dev', 'Prod', 'RC', 'CI'];
 				var createdIds = {};
 				for (var i = 0; i < scaffoldEnvs.length; i++)

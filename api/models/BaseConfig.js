@@ -1,44 +1,44 @@
 /**
- * Applications
+ * BaseConfig
  *
  * @module      :: Model
  * @description :: A short summary of how this model works and what it represents.
- *
+ * @docs    :: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
-	tableName: 'applications',
+
 	attributes:
 	{
 		id: "string",
-		name:
+		appId:
 		{
 			type: "string",
 			required: true
 		},
-		userID:
+		data:
+		{
+			type: "json",
+			required: true
+		},
+		appId:
 		{
 			type: "string",
 			required: true
 		},
-		baseConfig:
-		{
-			type: "string"
-		},
-		active:
-		{
-			type: "boolean",
-			defaultsTo: false
-		},
-		allowAccess:
+		history:
 		{
 			type: 'json',
 			defaultsTo:
-			{
-				fromIPs: ["127.0.0.1"],
-				fromHosts: ["lcoalhost"]
-			}
+			{}
+		},
+		currentRevision:
+		{
+			type: "integer"
+		},
+		publishedRevision:
+		{
+			type: "integer"
 		}
 	}
-
 };
