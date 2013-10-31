@@ -80,10 +80,7 @@ var Conf = {
 			Conf.replaceJson(replacePattern, valuePath);
 		}
 
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g',
-		{
-			valueNames: [null, null, 'match', null]
-		})
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')
 		console.log(matchDependancy)
 		if (!_.isEmpty(matchDependancy))
 		{
@@ -146,8 +143,37 @@ var Conf = {
 		});
 	}
 };
-
+var identity = "configuration";
 module.exports = {
+	update: function (req, res, next)
+	{
+		var reqData = req.param('data'),
+			reqId = req.param('id');
+
+		Configuration.findOne(
+		{
+			id: reqId
+		}).done(function (err, conf)
+		{
+			var currentRevision = conf.currentRevision + 1;
+			History.create(
+			{
+				of: identity,
+				confId: reqId,
+				data: reqData,
+				revision: currentRevision
+			}).done(function (err, history)
+			{
+				conf.data = reqData;
+				conf.history[currentRevision] = history.id;
+				conf.currentRevision = currentRevision;
+				conf.save(function (err, save)
+				{
+					res.json(save);
+				});
+			});
+		});
+	},
 	get: function (req, res)
 	{
 		var redis = sails.config.session.store.client;

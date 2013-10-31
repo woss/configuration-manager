@@ -1,17 +1,17 @@
 /**
- * Configurations
+ * History
  *
  * @module      :: Model
  * @description :: A short summary of how this model works and what it represents.
- *
+ * @docs		:: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
-	tableName: "configurations",
+
 	attributes:
 	{
 		id: "string",
-		appId:
+		confId:
 		{
 			type: "string",
 			required: true
@@ -19,32 +19,17 @@ module.exports = {
 		data:
 		{
 			type: "json",
-			required: true
-		},
-		envId:
-		{
-			type: "string",
-			required: true
-		},
-		active:
-		{
-			type: "boolean",
-			defaultsTo: false
-		},
-		history:
-		{
-			type: 'json',
+			required: true,
 			defaultsTo:
 			{}
 		},
-		currentRevision:
+		of:
 		{
-			type: "integer"
+			type: "string"
 		},
-		publishedRevision:
+		revision:
 		{
 			type: "integer"
 		}
-
 	}
 };
