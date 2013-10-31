@@ -12,6 +12,7 @@ function createScaffoldEnvs(appId, callback)
 };
 
 module.exports = {
+
 	get: function (req, res)
 	{
 		Application.findOne(

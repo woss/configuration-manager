@@ -21,7 +21,7 @@
 			},
 			"main":
 			{
-				"username": "{+/test_db_path112+}/{+/db/main/username+}",
+				"username": "{+/test_db_path112+}/{+/db/main/username+}", // this causes a problem
 				"password": "123456",
 				"db_name": "confManager",
 				"host": "http://localhost:3307"

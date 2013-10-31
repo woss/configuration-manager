@@ -30,6 +30,15 @@ module.exports = {
 		{
 			type: "boolean",
 			defaultsTo: false
+		},
+		allowAccess:
+		{
+			type: 'json',
+			defaultsTo:
+			{
+				fromIPs: ["127.0.0.1"],
+				fromHosts: ["lcoalhost"]
+			}
 		}
 	}
 

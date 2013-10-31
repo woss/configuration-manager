@@ -80,7 +80,7 @@ var Conf = {
 			Conf.replaceJson(replacePattern, valuePath);
 		}
 
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')
+		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0];
 		console.log(matchDependancy)
 		if (!_.isEmpty(matchDependancy))
 		{
@@ -169,11 +169,24 @@ module.exports = {
 				conf.currentRevision = currentRevision;
 				conf.save(function (err, save)
 				{
-					res.json(save);
+					if (err)
+						res.json(err, 400);
+					else
+						res.json(save);
 				});
 			});
 		});
+		res.json(
+		{
+			success: true
+		})
 	},
+	/**
+	 * Main method for getting published conf. It can be accessed via GET or POST
+	 * @param  {[type]} req [description]
+	 * @param  {[type]} res [description]
+	 * @return {[type]}     [description]
+	 */
 	get: function (req, res)
 	{
 		var redis = sails.config.session.store.client;
@@ -194,8 +207,14 @@ module.exports = {
 					}, 400)
 			}
 		});
-
 	},
+
+	/**
+	 * Publishes and merges the conf with baseConfig, sets it to redis
+	 * @param  {[type]} req [description]
+	 * @param  {[type]} res [description]
+	 * @return {[type]}     [description]
+	 */
 	publish: function (req, res)
 	{
 		var redis = sails.config.session.store.client;
@@ -214,36 +233,25 @@ module.exports = {
 				var mergedConf = merge(app.baseConfig, conf.data);
 				Conf.replacePaths(mergedConf, function (resp)
 				{
-					// console.log(resp);
 					if (resp.success)
 					{
-						// add first user
-						// client.sadd("confs", "confs:" + conf[0].uuid);
-						var uuid = require('node-uuid');
-						var hash = uuid.v4();
-
-						// redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data));
-						// redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
-						// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
-						// console.log('Adding conf to redis');
 						redis.set(conf.id, JSON.stringify(resp.data));
 						Configuration.update(
 						{
 							id: conf.id
 						},
 						{
-							active: true
-						}).done(function (err, resp) {});
-						return res.json(
+							active: true,
+							publishedRevision: conf.currentRevision
+						}).done(function (err, resp)
 						{
-							result: resp.data
+							if (err)
+								return res.json("Error with updating conf", 500);
 						});
+						return res.json(resp.data);
 					}
 					else
-						return res.json(500,
-						{
-							error: resp.error
-						});
+						return res.json(resp.error, 500);
 				});
 
 			});
@@ -267,24 +275,9 @@ module.exports = {
 				var mergedConf = merge(app.baseConfig, conf.data);
 				Conf.replacePaths(mergedConf, function (resp)
 				{
-					// console.log(resp);
 					if (resp.success)
 					{
-						// add first user
-						// client.sadd("confs", "confs:" + conf[0].uuid);
-						// var uuid = require('node-uuid');
-						// var hash = uuid.v4();
-
-						// redis.hmset("confs:" + conf.id, "data", JSON.stringify(resp.data));
-						// redis.hmset("published:" + hash, "data", JSON.stringify(resp.data));
-						// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
-						// console.log('Adding conf to redis');
-						// redis.set(conf.id, JSON.stringify(resp.data));
-						return res.json(
-						{
-							data: resp.data,
-							accessId: hash
-						});
+						return res.json(resp.data);
 					}
 					else
 						return res.json(500,
@@ -338,9 +331,6 @@ module.exports = {
 							// console.log(resp);
 							if (resp.success)
 							{
-								// add first user
-								// client.sadd("confs", "confs:" + conf[0].uuid);
-								// client.hmset("confs:" + conf[0].uuid, "conf", JSON.stringify(currentConf));
 								console.log('Adding conf to redis');
 								redis.set(conf[0].uuid, JSON.stringify(resp.data));
 								return res.json(resp.data);

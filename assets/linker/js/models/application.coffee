@@ -106,7 +106,7 @@ $ ->
   #listening socket for new apps
   socket.on "message", (data) ->
     console.log data
-    if data.model is "application"
+    if data.model is "application" and data.verb is 'create'
       viewModel.apps.push(new App(data.data))
     if data.model is "configuration"
       #rewrite this
