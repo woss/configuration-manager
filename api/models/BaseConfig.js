@@ -21,11 +21,6 @@ module.exports = {
 			type: "json",
 			required: true
 		},
-		appId:
-		{
-			type: "string",
-			required: true
-		},
 		history:
 		{
 			type: 'json',

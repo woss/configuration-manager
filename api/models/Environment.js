@@ -32,7 +32,7 @@ module.exports = {
 			defaultsTo:
 			{
 				fromIPs: ["127.0.0.1"],
-				fromHosts: ["lcoalhost"]
+				fromHosts: ["localhost"]
 			}
 		}
 	}

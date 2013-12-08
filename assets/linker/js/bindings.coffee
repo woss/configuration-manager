@@ -15,8 +15,13 @@ $ ->
         console.log xhr    
         window.location.href = "dash"
       error: (xhr, type) ->
+        console.log "error"
         console.log xhr
-        message = JSON.parse(xhr.responseText).message
+        $responseText = JSON.parse(xhr.responseText)
+        if $responseText is null 
+          message = "Something is wrong with REDIS"
+        else
+          message = $responseText.message
         $.pnotify
           title: xhr.statusText
           text: message,
