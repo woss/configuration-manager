@@ -1,5 +1,6 @@
 $ ->
   # Bindings for Login Button
+  # 
   $("#loginButton").on "click", (e) ->
     username = $("#username").val()
     password = $("#password").val()
