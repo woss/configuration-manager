@@ -1,3 +1,5 @@
+[![Dependency Status](https://gemnasium.com/woss/configuration-manager.png)](https://gemnasium.com/woss/configuration-manager)
+
 # Configuration Manager (CM)
 
 ## Description

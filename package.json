@@ -1,13 +1,12 @@
 {
 	"name": "ConfigurationManager",
-	"private": true,
+	"private": false,
 	"version": "0.0.1",
 	"description": "manager for confs",
 	"dependencies":
 	{
 		"sails": "0.9.7",
 		"grunt": "0.4.1",
-		"sails-disk": "~0.9.0",
 		"ejs": "0.8.4",
 		"optimist": "0.3.4",
 		"sails-mongo": "*",
