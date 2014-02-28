@@ -17,6 +17,7 @@ module.exports = {
 	{
 		passport.authenticate('basic',
 		{
+
 			session: true
 		}, function (err, user, info)
 		{

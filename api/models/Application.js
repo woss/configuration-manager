@@ -23,8 +23,7 @@ module.exports = {
 		},
 		baseConfig:
 		{
-			type: "json",
-			required: true
+			type: "string"
 		},
 		active:
 		{
@@ -37,7 +36,7 @@ module.exports = {
 			defaultsTo:
 			{
 				fromIPs: ["127.0.0.1"],
-				fromHosts: ["lcoalhost"]
+				fromHosts: ["localhost"]
 			}
 		}
 	}

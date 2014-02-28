@@ -1,13 +1,13 @@
 /**
- * Environments
+ * BaseConfig
  *
  * @module      :: Model
  * @description :: A short summary of how this model works and what it represents.
- *
+ * @docs    :: http://sailsjs.org/#!documentation/models
  */
 
 module.exports = {
-	tableName: 'environments',
+
 	attributes:
 	{
 		id: "string",
@@ -16,24 +16,24 @@ module.exports = {
 			type: "string",
 			required: true
 		},
-		name:
+		data:
 		{
-			type: "string",
+			type: "json",
 			required: true
 		},
-		active:
-		{
-			type: "boolean",
-			defaultsTo: false
-		},
-		allowAccess:
+		history:
 		{
 			type: 'json',
 			defaultsTo:
-			{
-				fromIPs: ["127.0.0.1"],
-				fromHosts: ["localhost"]
-			}
+			{}
+		},
+		currentRevision:
+		{
+			type: "integer"
+		},
+		publishedRevision:
+		{
+			type: "integer"
 		}
 	}
 };

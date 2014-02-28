@@ -10,138 +10,125 @@ var XRegExp = require('xregexp').XRegExp;
 var util = require('util');
 var merge = require('deepmerge');
 var Hash = require("hashish");
-var Conf = {
-	_json:
-	{},
-	json: '',
-	redis:
-	{},
-	/**
-	 * Replacing placeholders in given configuration object
-	 * @param  {[object]}			_json Configuration from DB
-	 * @param  {Function} cb 	Regular callback
-	 * @return {[object]}     Return object
-	 */
-	replacePaths: function (_json, cb)
-	{
-		if (_.isObject(_json))
-			var json = JSON.stringify(_json)
+var Conf;
+Conf = {
+    _json: {},
+    json: '',
+    redis: {},
+    /**
+     * Replacing placeholders in given configuration object
+     * @param  {[object]}            _json Configuration from DB
+     * @param  {Function} cb    Regular callback
+     * @return {[object]}     Return object
+     */
+    replacePaths: function (_json, cb) {
+        if (_.isObject(_json))
+            var json = JSON.stringify(_json)
 
-		Conf._json = _json;
-		Conf.json = json;
+        Conf._json = _json;
+        Conf.json = json;
 
-		var matches = XRegExp.matchRecursive(json, "\\{\\+\/", "\\+\\}", 'g',
-		{
-			valueNames: [null, null, 'match', null]
-		});
+        var matches = XRegExp.matchRecursive(json, "\\{\\+\/", "\\+\\}", 'g',
+            {
+                valueNames: [null, null, 'match', null]
+            });
 
-		for (var i = matches.length - 1; i >= 0; i--)
-		{
-			var item = matches[i];
-			replacePattern = item.name
-			Conf.recursiveFunction(replacePattern)
-		};
+        for (var i = matches.length - 1; i >= 0; i--) {
+            var item = matches[i];
+            replacePattern = item.name;
+            Conf.recursiveFunction(replacePattern)
+        }
 
-		// matches.forEach(function (item)
-		// {
-		// 	replacePattern = item.name
-		// 	Conf.recursiveFunction(replacePattern)
-		// });
 
-		return cb(
-		{
-			success: true,
-			data: JSON.parse(Conf.json)
-		});
-	},
+        // matches.forEach(function (item)
+        // {
+        // 	replacePattern = item.name
+        // 	Conf.recursiveFunction(replacePattern)
+        // });
 
-	/**
-	 * Recursive function that parses the placeholders and nodes
-	 * @param  {[string]} item  		Matched placeholder
-	 * @param  {[string]} searchPath  INitially empty, if dependency is found then we pass this
-	 * @return {[function]}            [description]
-	 */
-	recursiveFunction: function (item, searchPathDep)
-	{
-		searchPathDep = searchPathDep || "";
-		replacePattern = item
+        return cb(
+            {
+                success: true,
+                data: JSON.parse(Conf.json)
+            });
+    },
 
-		var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
+    /**
+     * Recursive function that parses the placeholders and nodes
+     * @param  {[string]} item        Matched placeholder
+     * @param  {[string]} searchPath    Initially empty, if dependency is found then we pass this
+     */
+    recursiveFunction: function (item, searchPathDep) {
+        searchPathDep = searchPathDep || "";
+        replacePattern = item;
 
-		searchPath = "$.." + replacePattern.replace(/\//g, '.');
+        var regex = XRegExp("\\{\\+\\/.*?\\+\\}");
 
-		valuePath = jsonPath(Conf._json, searchPath)[0];
+        searchPath = "$.." + replacePattern.replace(/\//g, '.');
 
-		if (!_.isEmpty(searchPathDep))
-		{
-			console.log('replacePattern ' + replacePattern)
-			console.log('master node for replacement is ' + searchPath);
-			searchPath = "$.." + searchPathDep.replace(/\//g, '.');
-			Conf.replaceJson(replacePattern, valuePath);
-		}
+        valuePath = jsonPath(Conf._json, searchPath)[0];
 
-		var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0];
-		console.log(matchDependancy)
-		if (!_.isEmpty(matchDependancy))
-		{
-			console.log('-----------------')
-			console.log('In search path ' + searchPath)
-			console.log('Value is ' + valuePath);
-			console.log('ReplacePattern  is ' + replacePattern);
-			console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
-			console.log('-----------------')
-			Conf.recursiveFunction(matchDependancy, replacePattern)
-		}
-		// here is replacement
-		Conf.replaceJson(replacePattern, valuePath);
-	},
-	/**
-	 * Small generic piece of code for replacement patternt
-	 * @param  {[string]} placeHolder
-	 * @param  {[string]} value
-	 * @return {[null]}             [description]
-	 */
-	replaceJson: function (placeHolder, value)
-	{
-		// console.log('Replacing ' + placeHolder + " with value " + value)
-		var replacePlacehodler = '{+/' + placeHolder + '+}';
-		Conf.json = Conf.json.replace(replacePlacehodler, value);
-		// console.log('+++++++++++++++')
-	},
-	checkIsItCached: function (confId, cb)
-	{
-		console.log(confId);
-		var hash = Conf.redis.get(confId, function (err, conf)
-		{
-			if (err)
-			{
-				cb(
-				{
-					success: false,
-					data: err
-				});
-			}
-			else
-			{
-				if (_.isEmpty(conf))
-				{
-					cb(
-					{
-						success: false,
-						msg: 'No configs in redis'
-					});
-				}
-				else
-				{
-					cb(
-					{
-						success: true,
-						data: JSON.parse(conf)
-					});
-				}
-			}
-		});
-	}
+        if (!_.isEmpty(searchPathDep)) {
+            console.log('replacePattern ' + replacePattern)
+            console.log('master node for replacement is ' + searchPath);
+            searchPath = "$.." + searchPathDep.replace(/\//g, '.');
+            Conf.replaceJson(replacePattern, valuePath);
+        }
+
+        var matchDependancy = XRegExp.matchRecursive(valuePath, "\\{\\+\/", "\\+\\}", 'g')[0];
+        console.log(matchDependancy)
+        if (!_.isEmpty(matchDependancy)) {
+            console.log('-----------------')
+            console.log('In search path ' + searchPath)
+            console.log('Value is ' + valuePath);
+            console.log('ReplacePattern  is ' + replacePattern);
+            console.log('Discovered dependency is ' + matchDependancy + ' must resolve this first')
+            console.log('-----------------')
+            Conf.recursiveFunction(matchDependancy, replacePattern)
+        }
+        // here is replacement
+        Conf.replaceJson(replacePattern, valuePath);
+    },
+    /**
+     * Small generic piece of code for replacement patternt
+     * @param  {[string]} placeHolder
+     * @param  {[string]} value
+     * @return {[null]}             [description]
+     */
+    replaceJson: function (placeHolder, value) {
+        // console.log('Replacing ' + placeHolder + " with value " + value)
+        var replacePlacehodler = '{+/' + placeHolder + '+}';
+        Conf.json = Conf.json.replace(replacePlacehodler, value);
+        // console.log('+++++++++++++++')
+    },
+    checkIsItCached: function (confId, cb) {
+        console.log(confId);
+        var hash = Conf.redis.get(confId, function (err, conf) {
+            if (err) {
+                cb(
+                    {
+                        success: false,
+                        data: err
+                    });
+            }
+            else {
+                if (_.isEmpty(conf)) {
+                    cb(
+                        {
+                            success: false,
+                            msg: 'No configs in redis'
+                        });
+                }
+                else {
+                    cb(
+                        {
+                            success: true,
+                            data: JSON.parse(conf)
+                        });
+                }
+            }
+        });
+    }
 };
 var identity = "configuration";
 module.exports = {
@@ -353,6 +340,7 @@ module.exports = {
 	 * @param  {[type]} res [description]
 	 * @return {[type]}     [description]
 	 */
+
 	deleteAll: function (req, res)
 	{
 		// For example, to delete a user named Johnny,
