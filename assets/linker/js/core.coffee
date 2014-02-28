@@ -6,7 +6,6 @@ class ch
     tok = user + ":" + password
     hash = btoa(tok)
     "Basic " + hash
-
   makePost: (data, location, _cb) ->
     $.ajax
       type: "POST"

@@ -1,0 +1,49 @@
+// Update Base Conf
+// call UPDATE application /application PUT
+{
+	"id": "52691d0cf831af1a1f000001",
+	"baseConfig":
+	{
+		"root_path": "/var/www/myApplication",
+		"base_path": "{+/root_path+}/www/public",
+		"test_db_path": "{+/db/default/host+}__something",
+		"test_db_path12": "{+/db/default/host+}__something",
+		"test_db_path112": "{+/db/default/host+}__something",
+		"test_db_path112": "{+/base_path+}__something",
+		"db":
+		{
+			"default":
+			{
+				"username": "danijel",
+				"password": "123456",
+				"db_name": "confManager",
+				"host": "http://localhost:3307"
+			},
+			"main":
+			{
+				"username": "{+/test_db_path112+}/{+/db/main/username+}", // this causes a problem
+				"password": "123456",
+				"db_name": "confManager",
+				"host": "http://localhost:3307"
+			}
+		}
+	}
+}
+// Update Conf
+// /configuration PUT
+{
+	"id": "52691d0cf831af1a1f000007",
+	"data":
+	{
+		"root_path": "/home/danijel/git/myApplication.git",
+		"db":
+		{
+			"dev":
+			{
+				"username": "danijelDev",
+				"password": "danijelDev",
+				"host": "http://danijel.devbox.dev:3308"
+			}
+		}
+	}
+}

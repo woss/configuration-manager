@@ -1,5 +1,6 @@
 $ ->
   # Bindings for Login Button
+  # 
   $("#loginButton").on "click", (e) ->
     username = $("#username").val()
     password = $("#password").val()
@@ -12,9 +13,20 @@ $ ->
       beforeSend: (xhr) ->
         xhr.setRequestHeader "Authorization", authHash
       success: (xhr)->
-        console.log xhr
+        console.log xhr    
         window.location.href = "dash"
       error: (xhr, type) ->
+        console.log "error"
+        console.log xhr
+        $responseText = JSON.parse(xhr.responseText)
+        if $responseText is null 
+          message = "Something is wrong with REDIS"
+        else
+          message = $responseText.message
+        $.pnotify
+          title: xhr.statusText
+          text: message,
+          type: 'error'
         messageJSON = JSON.parse(xhr.responseText)
   # Bindings for Signup Button
   $("#signUpButton").on "click", (e) ->
