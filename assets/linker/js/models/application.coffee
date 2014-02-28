@@ -9,16 +9,16 @@ $ ->
     constructor: (data) ->
       @name = ko.observable(data.name)
       @id = data.id
-      @uuid = data.uuid
       @isActive = ko.observable(data.active)
       @isNotActive = ko.observable(data.active)
+      @url = ko.observable("/application/get/"+@id)
+      @details = ko.observable(data.name)
 
   class Env 
     constructor: (data) ->
       @name = ko.observable(data.name)
-      @appUUID = data.appUUID
+      @appId = data.appId
       @id = data.id
-      @uuid = data.uuid
       @isActive = ko.observable(data.active)
       @isNotActive = ko.observable(data.active)
       @confs = ko.observableArray([])
@@ -26,10 +26,9 @@ $ ->
   class Conf
     constructor: (data) ->
       @id = data.id
-      @uuid = data.uuid
       @baseConfig = data.baseConfig
       @data = data.data
-      @envUUID = data.envUUID
+      @envId = data.envId
 
 
   ViewModel = ->
@@ -63,78 +62,40 @@ $ ->
     self.openApp = (app) -> 
       self.appInfo true
       self.appName(app.name)
-      data = {
-        "where":{
-          "appUUID":app.uuid
-        }
-      }
-      socket.post "/environment/find", data, (envs) ->
-        mappedEnvs = _.map envs, (env) ->
-          new Env(env)
-        self.envs mappedEnvs
-        self.getConfs(mappedEnvs)
+      $.get app.url(), (appData) ->
+        $('#dashboard').remove();
+        $('#application').remove();
+        $('#page-wrapper').append(appData);
 
     self.getConfs = (envs) ->
       _.map envs, (env) ->
         data = {
         "where":{
-          "appUUID":env.appUUID,
-          "envUUID":env.uuid
+          "appId":env.appId,
+          "envId":env.id
           }
         }
         socket.post "/configuration/find", data, (confs) ->
+          console.log confs
           mappedConfs = _.map confs, (conf) ->
             new Conf(conf)
           env.confs mappedConfs
     self.openConfs = (env) ->
       self.confs env.confs()
-       
+    self.showDiffConf = (e)->
+      container = document.getElementById("jsoneditor")
+      console.log container
+      json = editor.get()
+    self.openConf = (conf) ->
+      container = document.getElementById("jsoneditor")
+      editor = new jsoneditor.JSONEditor(container)
+      editor.set conf.data
+      # get json
+      
+      $('#showConf').modal('show');
+      console.log conf
     return
   viewModel = new ViewModel()
-  
-
-  viewModel.modal =
-    header: ko.observable("Delete ")
-    body: ko.observable("<p>You are about to delete one track url, this procedure is irreversible.</p>
-        <p>Do you want to proceed?</p>")
-    closeLabel: "No"
-    primaryLabel: "Yes"
-    show: ko.observable(false) # Set to true to show initially
-    onClose: ->
-      viewModel.onModalClose()
-
-    onAction: ->
-      viewModel.onModalAction()
-
-  viewModel.showModal = ->
-    viewModel.modal.show true
-    console.log 'sdasdas'
-
-  viewModel.onModalClose = () ->
-      alert("CLOSE!");
-  
-  viewModel.onModalAction = () ->
-      alert("ACTION!");
-  
-  ko.bindingHandlers.bootstrapModal = 
-    init: (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) ->
-      props = valueAccessor()
-      vm = bindingContext.createChildContext(viewModel)
-      ko.utils.extend vm, props
-      vm.close = ->
-        vm.show false
-        vm.onClose()
-
-      vm.action = ->
-        vm.onAction()
-
-      ko.utils.toggleDomNodeCssClass element, "modal hide fade", true
-      ko.renderTemplate "myModal", vm, null, element
-      showHide = ko.computed(->
-        $(element).modal (if vm.show() then "show" else "hide")
-      )
-      controlsDescendantBindings: true
-
   ko.applyBindings viewModel
 
   # getting data
@@ -144,7 +105,8 @@ $ ->
     viewModel.apps mappedApps
   #listening socket for new apps
   socket.on "message", (data) ->
-    if data.model is "application"
+    console.log data
+    if data.model is "application" and data.verb is 'create'
       viewModel.apps.push(new App(data.data))
     if data.model is "configuration"
       #rewrite this

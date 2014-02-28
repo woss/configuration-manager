@@ -11,14 +11,9 @@ module.exports = {
 	attributes:
 	{
 		id: "string",
-		uuid:
+		appId:
 		{
-			type: "uuidv4",
-			index: true
-		},
-		appUUID:
-		{
-			type: "uuidv4",
+			type: "string",
 			required: true
 		},
 		data:
@@ -26,42 +21,29 @@ module.exports = {
 			type: "json",
 			required: true
 		},
-		envUUID:
+		envId:
 		{
-			type: "uuidv4",
+			type: "string",
 			required: true
-		},
-		baseConfigUUID: "uuidv4",
-		baseConfig:
-		{
-			type: "boolean",
-			defaultsTo: false
 		},
 		active:
 		{
 			type: "boolean",
 			defaultsTo: false
+		},
+		history:
+		{
+			type: 'json',
+			defaultsTo:
+			{}
+		},
+		currentRevision:
+		{
+			type: "integer"
+		},
+		publishedRevision:
+		{
+			type: "integer"
 		}
-
-	},
-	// Lifecycle Callbacks
-	beforeCreate: function (values, next)
-	{
-		var uuid = require('node-uuid');
-		var hash = uuid.v4();
-		values.uuid = hash;
-		next();
 	}
-	// beforeCreate: function(values, cb) {
-	//   var self = this;
-
-	//   // an example encrypt function defined somewhere
-	//   encrypt(this.password, function(err, password) {
-	//     if(err) return cb(err);
-
-	//     self.password = password;
-	//     cb();
-	//   });
-	// },
-
 };
