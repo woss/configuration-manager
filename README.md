@@ -68,3 +68,7 @@ http://support.mongohq.com/use-cases/document-versioning.html
     * resolve base_path
     * resolve some_path
     * resolve some_other_path
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/woss/configuration-manager/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
